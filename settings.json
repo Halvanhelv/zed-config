@@ -123,5 +123,8 @@
   "terminal": {
     "option_as_meta": true
   },
-  "max_tabs": 10
+  "max_tabs": 10,
+  "preview_tabs": {
+    "enabled": false
+  }
 }
