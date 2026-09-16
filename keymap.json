@@ -29,6 +29,11 @@
       // only offers `cmd-f5`, and `shift-f10` opens the task picker instead.
       "ctrl-r": "task::Rerun",
 
+      // The JetBrains layer took `cmd-0` (reset zoom) for the git panel, so
+      // zooming with cmd+scroll had no way back. `cmd-shift-0` is only bound
+      // inside the image viewer.
+      "cmd-shift-0": "zed::ResetBufferFontSize",
+
       // RubyMine's Go to Test. Zed has no such action and leaves this key on
       // pane::ReopenClosedItem, which reopens the last closed tab regardless of
       // the cursor. The task is defined in tasks.json.
