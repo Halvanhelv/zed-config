@@ -8,6 +8,7 @@
         "variable.local": { "color": "#d4b021", "font_style": "italic" },
         "variable.parameter": { "color": "#d4b021", "font_style": "italic" },
         "string.special.symbol": { "color": "#89a6ae" },
+        "number": { "color": "#74a4c8" },
         "function.builtin": { "color": "#fc9806" },
         "function.method.builtin": { "color": "#fc9806" }
       }
@@ -88,7 +89,7 @@
         "featuresConfiguration": {
           "inlayHint": {
             "implicitRescue": true,
-            "implicitHashValue": true
+            "implicitHashValue": false
           }
         },
         "enabledFeatures": {
