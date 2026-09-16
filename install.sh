@@ -38,6 +38,16 @@ if command -v ruby >/dev/null 2>&1; then
   fi
 fi
 
+# The Ruby grammar cannot tell the Rails DSL from any other method call, so the
+# highlighting patch lives outside the theme. Applying it needs the Ruby
+# extension on disk, which only happens after Zed has run once.
+if [ -f "$HOME/Library/Application Support/Zed/extensions/installed/ruby/languages/ruby/highlights.scm" ]; then
+  "$here/bin/patch-ruby-highlights.sh" || true
+else
+  echo "ruby extension not installed yet -- run bin/patch-ruby-highlights.sh"
+  echo "  after Zed's first launch (and again after it updates the extension)."
+fi
+
 echo
 echo "Done. Zed installs the rest on first launch:"
 echo "  - extensions listed under auto_install_extensions (ruby, vue, html, emmet)"
