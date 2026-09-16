@@ -202,7 +202,7 @@
             "color": "#a9b7c6"
           },
           "punctuation.delimiter": {
-            "color": "#cc7832"
+            "color": "#a9b7c6"
           },
           "punctuation.special": {
             "color": "#cc7832"
@@ -220,7 +220,7 @@
             "color": "#cc7832"
           },
           "string.special.symbol": {
-            "color": "#6a8759"
+            "color": "#769aa5"
           },
           "number": {
             "color": "#6897bb"
@@ -243,23 +243,22 @@
             "color": "#ffc66d"
           },
           "constant": {
-            "color": "#9876aa",
-            "font_style": "italic"
+            "color": "#a9b7c6"
           },
           "constructor": {
             "color": "#a9b7c6"
           },
           "type": {
-            "color": "#769aa5"
+            "color": "#a9b7c6"
           },
           "type.class": {
-            "color": "#769aa5"
+            "color": "#a9b7c6"
           },
           "variable": {
             "color": "#a9b7c6"
           },
           "variable.special": {
-            "color": "#9876aa"
+            "color": "#cc7832"
           },
           "variable.member": {
             "color": "#9876aa"
@@ -296,6 +295,54 @@
           "hint": {
             "color": "#787878",
             "font_style": "italic"
+          },
+          "keyword.function": {
+            "color": "#cc7832"
+          },
+          "keyword.exception": {
+            "color": "#cc7832"
+          },
+          "keyword.import": {
+            "color": "#cc7832"
+          },
+          "keyword.control": {
+            "color": "#cc7832"
+          },
+          "keyword.control.return": {
+            "color": "#cc7832"
+          },
+          "keyword.control.repeat": {
+            "color": "#cc7832"
+          },
+          "keyword.control.conditional": {
+            "color": "#cc7832"
+          },
+          "constant.builtin": {
+            "color": "#cc7832"
+          },
+          "type.super": {
+            "color": "#a9b7c6"
+          },
+          "function.method.definition": {
+            "color": "#ffc66d"
+          },
+          "function.builtin": {
+            "color": "#ffc66d"
+          },
+          "function.method.builtin": {
+            "color": "#ffc66d"
+          },
+          "variable.special.instance": {
+            "color": "#9876aa"
+          },
+          "variable.parameter": {
+            "color": "#a9b7c6"
+          },
+          "variable.parameter.keyword": {
+            "color": "#a9b7c6"
+          },
+          "embedded": {
+            "color": "#a9b7c6"
           }
         },
         "editor.indent_guide": "#373737",
