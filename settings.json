@@ -1,7 +1,8 @@
 {
+  "autosave": "on_focus_change",
   "icon_theme": "JetBrains Icons Dark",
   "base_keymap": "JetBrains",
-  "theme": "JetBrains Dark",
+  "theme": "Darcula RubyMine",
   "ui_font_family": "JetBrains Mono",
   "ui_font_size": 14,
   "buffer_font_family": "JetBrains Mono",
@@ -13,12 +14,13 @@
     "dock": "left"
   },
   "collaboration_panel": {
-    "dock": "left"
+    "button": false
   },
   "git_panel": {
-    "dock": "left"
+    "dock": "right"
   },
   "agent": {
+    "sidebar_side": "right",
     "sandbox_permissions": {
       "network_hosts": [
         "zed.dev"
@@ -100,17 +102,5 @@
   },
   "tabs": {
     "close_position": "left"
-  },
-  "theme_overrides": {
-    "JetBrains Dark": {
-      "background": "#1e1f22",
-      "panel.background": "#1e1f22",
-      "tab_bar.background": "#1e1f22",
-      "tab.inactive_background": "#1e1f22",
-      "title_bar.background": "#1e1f22",
-      "status_bar.background": "#1e1f22",
-      "surface.background": "#1e1f22",
-      "elevated_surface.background": "#2b2d30"
-    }
   }
 }
