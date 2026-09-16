@@ -1,0 +1,7 @@
+id = "jetbrains-icons-ruby"
+name = "JetBrains Icons + Ruby"
+version = "0.0.1"
+schema_version = 1
+description = "JetBrains Icons with the Ruby and Rails mappings the upstream theme is missing"
+authors = ["IG <islam.gagiev@jetrockets.com>"]
+icon_themes = ["icon_themes/jetbrains-icons-ruby.json"]
