@@ -327,10 +327,10 @@
             "color": "#ffc66d"
           },
           "function.builtin": {
-            "color": "#a9b7c6"
+            "color": "#cc7832"
           },
           "function.method.builtin": {
-            "color": "#a9b7c6"
+            "color": "#cc7832"
           },
           "variable.special.instance": {
             "color": "#9876aa"
