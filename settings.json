@@ -19,10 +19,17 @@
     "dock": "left"
   },
   "agent": {
+    "sandbox_permissions": {
+      "network_hosts": [
+        "zed.dev"
+      ]
+    },
     "dock": "right",
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-4o"
+      "effort": "medium",
+      "enable_thinking": true,
+      "provider": "zed.dev",
+      "model": "gpt-5.6-luna"
     },
     "favorite_models": [],
     "model_parameters": []
@@ -93,5 +100,20 @@
   },
   "tabs": {
     "close_position": "left"
+  },
+  "experimental.theme_overrides": {
+    "background": "#1e1f22",
+    "editor.background": "#1e1f22",
+    "editor.gutter.background": "#1e1f22",
+    "editor.subheader.background": "#1e1f22",
+    "panel.background": "#1e1f22",
+    "tab_bar.background": "#1e1f22",
+    "tab.active_background": "#1e1f22",
+    "toolbar.background": "#1e1f22",
+    "title_bar.background": "#1e1f22",
+    "status_bar.background": "#1e1f22",
+    "terminal.background": "#1e1f22",
+    "surface.background": "#2b2d30",
+    "elevated_surface.background": "#2b2d30"
   }
 }
