@@ -10,6 +10,16 @@
         "collapsed": "./icons/dark/folder.svg",
         "expanded": "./icons/dark/folder.svg"
       },
+      "named_directory_icons": {
+        "test": {
+          "collapsed": "./icons/dark/folder_test.svg",
+          "expanded": "./icons/dark/folder_test.svg"
+        },
+        "spec": {
+          "collapsed": "./icons/dark/folder_test.svg",
+          "expanded": "./icons/dark/folder_test.svg"
+        }
+      },
       "chevron_icons": {
         "collapsed": "./icons/dark/chevron_right.svg",
         "expanded": "./icons/dark/chevron_down.svg"
@@ -92,6 +102,18 @@
         "yarn.lock": "yarn",
         "yml": "yaml",
         "zip": "archive"
+      },
+      "file_stems": {
+        "Appraisals": "ruby",
+        "Brewfile": "ruby",
+        "Capfile": "ruby",
+        "Dangerfile": "ruby",
+        "Dockerfile": "docker",
+        "Fastfile": "ruby",
+        "Gemfile": "ruby",
+        "Guardfile": "ruby",
+        "Procfile": "ruby",
+        "Rakefile": "ruby"
       },
       "file_icons": {
         "env": {
@@ -472,18 +494,6 @@
         "groovy": {
           "path": "./icons/dark/groovy.svg"
         }
-      },
-      "file_stems": {
-        "Appraisals": "ruby",
-        "Brewfile": "ruby",
-        "Capfile": "ruby",
-        "Dangerfile": "ruby",
-        "Dockerfile": "docker",
-        "Fastfile": "ruby",
-        "Gemfile": "ruby",
-        "Guardfile": "ruby",
-        "Procfile": "ruby",
-        "Rakefile": "ruby"
       }
     },
     {
@@ -492,6 +502,16 @@
       "directory_icons": {
         "collapsed": "./icons/light/folder.svg",
         "expanded": "./icons/light/folder.svg"
+      },
+      "named_directory_icons": {
+        "test": {
+          "collapsed": "./icons/light/folder_test.svg",
+          "expanded": "./icons/light/folder_test.svg"
+        },
+        "spec": {
+          "collapsed": "./icons/light/folder_test.svg",
+          "expanded": "./icons/light/folder_test.svg"
+        }
       },
       "chevron_icons": {
         "collapsed": "./icons/light/chevron_right.svg",
@@ -575,6 +595,18 @@
         "yarn.lock": "yarn",
         "yml": "yaml",
         "zip": "archive"
+      },
+      "file_stems": {
+        "Appraisals": "ruby",
+        "Brewfile": "ruby",
+        "Capfile": "ruby",
+        "Dangerfile": "ruby",
+        "Dockerfile": "docker",
+        "Fastfile": "ruby",
+        "Gemfile": "ruby",
+        "Guardfile": "ruby",
+        "Procfile": "ruby",
+        "Rakefile": "ruby"
       },
       "file_icons": {
         "env": {
@@ -955,18 +987,6 @@
         "groovy": {
           "path": "./icons/light/groovy.svg"
         }
-      },
-      "file_stems": {
-        "Appraisals": "ruby",
-        "Brewfile": "ruby",
-        "Capfile": "ruby",
-        "Dangerfile": "ruby",
-        "Dockerfile": "docker",
-        "Fastfile": "ruby",
-        "Gemfile": "ruby",
-        "Guardfile": "ruby",
-        "Procfile": "ruby",
-        "Rakefile": "ruby"
       }
     }
   ]
