@@ -94,8 +94,16 @@ token rule and tree-sitter paints calls again.
 
 Its inlay hints are off until `featuresConfiguration.inlayHint` asks for them,
 and even then it only knows the implicit `rescue StandardError` and the value
-behind a shorthand hash key. RubyMine's parameter-name hints have no
-counterpart -- the server does not implement them.
+behind a shorthand hash key -- the listener registers exactly two handlers,
+`on_rescue_node_enter` and `on_implicit_node_enter`, on main as well as in the
+installed gem. Only the rescue one is on here; RubyMine does not repeat a
+shorthand hash value, so neither do we.
+
+RubyMine's parameter-name hints, the `name` and `**options` it draws inside a
+call, are therefore out of reach, and not as a matter of waiting: Shopify
+closed the inlay hints issue saying parameter names are "covered by signature
+help" and not an inlay hint's job. Lines will stay shorter here than in
+RubyMine, with identical code.
 
 ## Colours measured, not guessed
 
@@ -111,6 +119,7 @@ anchors exactly. What that turned up:
 | predefined methods (`extend`, `has_many`) | `#fc9806` | a *second*, brighter orange |
 | local variables and parameters | `#d4b021` italic | not the `#ffc66d` of method names |
 | symbols and hash keys | `#89a6ae` | theme had `#769aa5` |
+| numbers | `#74a4c8` | theme had `#6897bb` |
 | comma | `#cc7832` | but `.` and `::` stay default |
 
 A screen recording is not a substitute: H.264 stores chroma at quarter
