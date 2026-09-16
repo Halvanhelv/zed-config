@@ -101,19 +101,16 @@
   "tabs": {
     "close_position": "left"
   },
-  "experimental.theme_overrides": {
-    "background": "#1e1f22",
-    "editor.background": "#1e1f22",
-    "editor.gutter.background": "#1e1f22",
-    "editor.subheader.background": "#1e1f22",
-    "panel.background": "#1e1f22",
-    "tab_bar.background": "#1e1f22",
-    "tab.active_background": "#1e1f22",
-    "toolbar.background": "#1e1f22",
-    "title_bar.background": "#1e1f22",
-    "status_bar.background": "#1e1f22",
-    "terminal.background": "#1e1f22",
-    "surface.background": "#2b2d30",
-    "elevated_surface.background": "#2b2d30"
+  "theme_overrides": {
+    "JetBrains Dark": {
+      "background": "#1e1f22",
+      "panel.background": "#1e1f22",
+      "tab_bar.background": "#1e1f22",
+      "tab.inactive_background": "#1e1f22",
+      "title_bar.background": "#1e1f22",
+      "status_bar.background": "#1e1f22",
+      "surface.background": "#1e1f22",
+      "elevated_surface.background": "#2b2d30"
+    }
   }
 }
