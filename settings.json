@@ -43,7 +43,9 @@
     "ruby": true,
     "vue": true,
     "html": true,
-    "emmet": true
+    "emmet": true,
+    "toml": true,
+    "env": true
   },
   "lsp": {
     "ruby-lsp": {
@@ -117,5 +119,9 @@
   },
   "preferred_line_length": 120,
   "show_wrap_guides": true,
-  "vertical_scroll_margin": 0
+  "vertical_scroll_margin": 0,
+  "terminal": {
+    "option_as_meta": true
+  },
+  "max_tabs": 10
 }
