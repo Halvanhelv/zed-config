@@ -1,6 +1,11 @@
 {
   "autosave": "on_focus_change",
-  "icon_theme": "JetBrains Icons Dark",
+  "icon_theme": "JetBrains Icons + Ruby Dark",
+  "theme_overrides": {
+    "Darcula RubyMine": {
+      "text.muted": "#dfe1e5"
+    }
+  },
   "base_keymap": "JetBrains",
   "theme": "Darcula RubyMine",
   "ui_font_family": "JetBrains Mono",
