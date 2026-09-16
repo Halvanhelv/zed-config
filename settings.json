@@ -10,10 +10,12 @@
   "mouse_wheel_zoom": true,
   "soft_wrap": "none",
   "project_panel": {
+    "folder_indicator": "both",
     "dock": "left",
     "git_status": true
   },
   "outline_panel": {
+    "folder_indicator": "both",
     "dock": "left"
   },
   "collaboration_panel": {
