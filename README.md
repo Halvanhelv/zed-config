@@ -84,11 +84,39 @@ and `document_symbols` only for Ruby, because enabling it turns tree-sitter
 symbols off entirely and would empty the outline for Markdown and anything else
 without a server.
 
-One gap worth knowing: ruby-lsp emits no token for the *declaration* of a local
-variable, only for its uses. So `tally = ...` falls back to tree-sitter while
-`tally` on the next line comes from the server. Both are painted `#ffc66d` --
-the syntax override for `variable` and the semantic token rule -- so the
-inconsistency is invisible.
+Two gaps worth knowing. ruby-lsp emits no token for the *declaration* of a
+local variable, only for its uses, so `tally = ...` falls back to tree-sitter
+while `tally` on the next line comes from the server; the grammar patch adds an
+`(assignment left: ...)` rule and both land on the same colour. And it reports
+every call as `method`, `has_many` included, which in `combined` mode wiped out
+the Rails DSL colours -- so `method` is switched off with an empty semantic
+token rule and tree-sitter paints calls again.
+
+Its inlay hints are off until `featuresConfiguration.inlayHint` asks for them,
+and even then it only knows the implicit `rescue StandardError` and the value
+behind a shorthand hash key. RubyMine's parameter-name hints have no
+counterpart -- the server does not implement them.
+
+## Colours measured, not guessed
+
+Screenshots do not carry the theme's hex values: the capture shifts them. Every
+colour here was recovered by calibrating on six known pairs (theme value
+against its pixel in a Zed screenshot), fitting a per-channel curve and
+inverting it over the RubyMine shot; the calibration round-trips its own
+anchors exactly. What that turned up:
+
+| Role | RubyMine | Note |
+|------|----------|------|
+| keywords (`module`, `def`) | `#cc7832` | matched already |
+| predefined methods (`extend`, `has_many`) | `#fc9806` | a *second*, brighter orange |
+| local variables and parameters | `#d4b021` italic | not the `#ffc66d` of method names |
+| symbols and hash keys | `#89a6ae` | theme had `#769aa5` |
+| comma | `#cc7832` | but `.` and `::` stay default |
+
+A screen recording is not a substitute: H.264 stores chroma at quarter
+resolution and code glyphs are thinner than that grid. Recovering known Zed
+colours from a 1512x982 capture missed by 28 to 95 units -- more than the
+distance between the colours being told apart.
 
 Two RubyMine habits have no counterpart and are not worth hunting for: Zed has
 no peek popup (`cmd+Y`), no clipboard history, no complete-statement, and one

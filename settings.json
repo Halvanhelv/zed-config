@@ -5,7 +5,11 @@
     "Darcula RubyMine": {
       "text.muted": "#dfe1e5",
       "syntax": {
-        "variable": { "color": "#ffc66d" }
+        "variable.local": { "color": "#d4b021", "font_style": "italic" },
+        "variable.parameter": { "color": "#d4b021", "font_style": "italic" },
+        "string.special.symbol": { "color": "#89a6ae" },
+        "function.builtin": { "color": "#fc9806" },
+        "function.method.builtin": { "color": "#fc9806" }
       }
     }
   },
@@ -17,6 +21,7 @@
   "buffer_font_size": 12,
   "mouse_wheel_zoom": true,
   "soft_wrap": "none",
+  "inlay_hints": { "enabled": true },
   "semantic_tokens": "combined",
   "document_folding_ranges": "on",
   "file_scan_exclusions": [
@@ -80,6 +85,12 @@
   "lsp": {
     "ruby-lsp": {
       "initialization_options": {
+        "featuresConfiguration": {
+          "inlayHint": {
+            "implicitRescue": true,
+            "implicitHashValue": true
+          }
+        },
         "enabledFeatures": {
           "diagnostics": false
         }
@@ -106,7 +117,10 @@
   },
   "global_lsp_settings": {
     "semantic_token_rules": [
-      { "token_type": "variable", "foreground_color": "#ffc66d" }
+      { "token_type": "variable", "token_modifiers": ["defaultLibrary"], "style": ["variable.special"] },
+      { "token_type": "variable", "foreground_color": "#d4b021", "font_style": "italic" },
+      { "token_type": "parameter", "foreground_color": "#d4b021", "font_style": "italic" },
+      { "token_type": "method" }
     ]
   },
   "languages": {
