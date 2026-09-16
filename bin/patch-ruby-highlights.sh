@@ -123,6 +123,26 @@ cat >> "$SCM" <<'SCHEME'
     "json" "jsonb" "uuid" "inet" "cidr" "macaddr" "interval" "money"
     "references" "belongs_to" "column" "index" "primary_key"
     "virtual" "vector"))
+
+; The left-hand side of an assignment. ruby-lsp emits a semantic token for a
+; local variable's uses but not for the line that declares it, so without this
+; `tally = ...` and `tally` on the next line would be different colours.
+; Appended last on purpose: later patterns win over the file's opening
+; [(identifier) (global_variable)] @variable rule.
+(assignment
+  left: (identifier) @variable.local)
+
+(operator_assignment
+  left: (identifier) @variable.local)
+
+; RubyMine paints a comma like a keyword (#cc7832) but leaves `.` and `::`
+; default. The grammar lumps all four into @punctuation.delimiter, so pull the
+; separators back out into @punctuation.special, which the theme already has at
+; the keyword colour.
+[
+  ","
+  ";"
+] @punctuation.special
 SCHEME
 
 echo "patched: $SCM"
