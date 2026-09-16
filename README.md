@@ -36,6 +36,25 @@ debugger F-keys all match RubyMine already. `keymap.json` only fills gaps:
 | `cmd+alt+V` / `H` | split right / down | RubyMine has no shortcut for it |
 | `ctrl+cmd+B` | left dock | `cmd+B` went to Go to Definition |
 
+## The Rails DSL patch
+
+`belongs_to`, `scope`, `has_many` and the rest read as keywords in RubyMine,
+which resolves them to ActiveRecord. Tree-sitter has no such knowledge and
+captures every call identically:
+
+```scheme
+(call method: [(identifier) (constant)] @function.method)
+```
+
+so no theme can separate `belongs_to` from `where` -- any colour lands on both.
+`bin/patch-ruby-highlights.sh` appends an `#any-of?` list to the Ruby
+extension's `highlights.scm`, in the same style the grammar already uses for
+`include`/`extend`, routing the DSL to `@function.builtin`.
+
+It edits an installed extension, so **a Zed extension update wipes it**. Re-run
+the script afterwards; it is idempotent and keeps the original beside it as
+`highlights.scm.orig`.
+
 Two RubyMine habits have no counterpart and are not worth hunting for: Zed has
 no peek popup (`cmd+Y`), no clipboard history, no complete-statement, and one
 symbol picker rather than separate class and symbol ones.
