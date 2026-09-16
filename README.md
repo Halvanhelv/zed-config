@@ -50,9 +50,9 @@ two glyphs instead of becoming an arrow.
 
 ## The Rails DSL patch
 
-`belongs_to`, `scope`, `has_many` and the rest read as keywords in RubyMine,
-which resolves them to ActiveRecord. Tree-sitter has no such knowledge and
-captures every call identically:
+`belongs_to`, `gem`, `resources` and the rest read as keywords in RubyMine,
+which resolves them to ActiveRecord, Bundler and the router. Tree-sitter has no
+such knowledge and captures every call identically:
 
 ```scheme
 (call method: [(identifier) (constant)] @function.method)
@@ -63,9 +63,32 @@ so no theme can separate `belongs_to` from `where` -- any colour lands on both.
 extension's `highlights.scm`, in the same style the grammar already uses for
 `include`/`extend`, routing the DSL to `@function.builtin`.
 
+The list covers associations, validations, callbacks, controller and job
+macros, the Bundler DSL, the router, migrations and `t.string`-style column
+builders. Matching is by name across every Ruby file -- the parser cannot tell
+a Gemfile from a model -- so names common enough to collide with ordinary calls
+(`path`, `default`, `execute`, `file`, `up`, `down`, `change`) are left out.
+
 It edits an installed extension, so **a Zed extension update wipes it**. Re-run
-the script afterwards; it is idempotent and keeps the original beside it as
-`highlights.scm.orig`.
+the script afterwards. It keeps the original beside it as `highlights.scm.orig`
+and rebuilds the block from that copy every run, so re-running also picks up
+names added since.
+
+## Highlighting from the language server
+
+Tree-sitter cannot tell a local variable from a receiverless method call --
+both are bare identifiers. ruby-lsp can, so `semantic_tokens` is `combined`:
+tree-sitter paints the base, the server corrects it. `document_folding_ranges`
+is on globally (it falls back to tree-sitter when the server returns nothing)
+and `document_symbols` only for Ruby, because enabling it turns tree-sitter
+symbols off entirely and would empty the outline for Markdown and anything else
+without a server.
+
+One gap worth knowing: ruby-lsp emits no token for the *declaration* of a local
+variable, only for its uses. So `tally = ...` falls back to tree-sitter while
+`tally` on the next line comes from the server. Both are painted `#ffc66d` --
+the syntax override for `variable` and the semantic token rule -- so the
+inconsistency is invisible.
 
 Two RubyMine habits have no counterpart and are not worth hunting for: Zed has
 no peek popup (`cmd+Y`), no clipboard history, no complete-statement, and one
