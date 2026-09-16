@@ -1,0 +1,45 @@
+#!/bin/sh
+# Prepare a freshly cloned copy of this configuration for use.
+#
+# Cloning is the install: this repository *is* ~/.config/zed, so there are no
+# files to copy. What needs doing is the part a clone cannot carry -- an
+# absolute path baked into tasks.json, the executable bit, and the language
+# server that has to exist under the right Ruby.
+set -eu
+
+here=$(cd "$(dirname "$0")" && pwd)
+
+if [ "$here" != "$HOME/.config/zed" ]; then
+  echo "warning: expected to be at ~/.config/zed, found $here"
+  echo "         Zed reads only that path; move the clone there first."
+fi
+
+chmod +x "$here"/bin/*.sh
+
+# tasks.json names the helper by absolute path -- Zed does not expand ~ there.
+if grep -q '"/Users/[^"]*/.config/zed/bin/' "$here/tasks.json" 2>/dev/null; then
+  tmp=$(mktemp)
+  sed "s|\"/Users/[^\"]*/\.config/zed/bin/|\"$here/bin/|" "$here/tasks.json" > "$tmp"
+  mv "$tmp" "$here/tasks.json"
+  echo "tasks.json: helper path rewritten to $here/bin/"
+fi
+
+# Zed installs ruby-lsp for nobody. It is resolved from PATH, so it must exist
+# under the Ruby each project pins -- a version that lacks it fails silently
+# with "rbenv: ruby-lsp: command not found" and the editor simply has no Ruby
+# intelligence at all. Install it per Ruby version, not once.
+if command -v ruby >/dev/null 2>&1; then
+  if command -v ruby-lsp >/dev/null 2>&1; then
+    echo "ruby-lsp: $(ruby-lsp --version) for ruby $(ruby -e 'print RUBY_VERSION')"
+  else
+    echo "ruby-lsp: missing for ruby $(ruby -e 'print RUBY_VERSION') -- installing"
+    gem install ruby-lsp
+    command -v rbenv >/dev/null 2>&1 && rbenv rehash
+  fi
+fi
+
+echo
+echo "Done. Zed installs the rest on first launch:"
+echo "  - extensions listed under auto_install_extensions (ruby, vue, html, emmet)"
+echo "  - herb, tailwindcss, vtsls and vue language servers, on demand"
+echo "  - the Claude agent, via npx, on its first thread (then run /login)"

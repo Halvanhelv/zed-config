@@ -1,0 +1,20 @@
+// Global Zed tasks. Project-specific ones belong in <project>/.zed/tasks.json.
+[
+  {
+    // Stands in for RubyMine's cmd+shift+T. Zed has no "go to test" action,
+    // and that key is otherwise pane::ReopenClosedItem, which reopens whatever
+    // tab was closed last -- unrelated to the cursor.
+    "label": "Go to test",
+    "command": "/Users/islamgagiev/.config/zed/bin/goto-test.sh",
+    "args": ["$ZED_FILE"],
+    "use_new_terminal": false,
+    "allow_concurrent_runs": true,
+    // Never surface the terminal: the jump should feel like a keystroke, not a
+    // build. The script reports its failures through Notification Center.
+    "reveal": "never",
+    "hide": "always",
+    // "system" would start the login shell (zsh, ~85ms of rc files here) just
+    // to exec a /bin/sh script.
+    "shell": { "program": "/bin/sh" }
+  }
+]

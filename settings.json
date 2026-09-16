@@ -1,0 +1,97 @@
+{
+  "icon_theme": "JetBrains Icons Dark",
+  "base_keymap": "JetBrains",
+  "theme": "JetBrains Dark",
+  "ui_font_family": "JetBrains Mono",
+  "ui_font_size": 14,
+  "buffer_font_family": "JetBrains Mono",
+  "buffer_font_size": 12,
+  "project_panel": {
+    "dock": "left"
+  },
+  "outline_panel": {
+    "dock": "left"
+  },
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "git_panel": {
+    "dock": "left"
+  },
+  "agent": {
+    "dock": "right",
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4o"
+    },
+    "favorite_models": [],
+    "model_parameters": []
+  },
+  "auto_install_extensions": {
+    "ruby": true,
+    "vue": true,
+    "html": true,
+    "emmet": true
+  },
+  "lsp": {
+    "ruby-lsp": {
+      "initialization_options": {
+        "enabledFeatures": {
+          "diagnostics": false
+        }
+      }
+    },
+    "rubocop": {
+      "initialization_options": {
+        "safeAutocorrect": false
+      }
+    },
+    "tailwindcss-language-server": {
+      "settings": {
+        "includeLanguages": {
+          "erb": "html",
+          "ruby": "html"
+        },
+        "experimental": {
+          "classRegex": [
+            "\\bclass:\\s*['\"]([^'\"]*)['\"]"
+          ]
+        }
+      }
+    }
+  },
+  "languages": {
+    "Ruby": {
+      "language_servers": [
+        "ruby-lsp",
+        "rubocop"
+      ],
+      "formatter": {
+        "language_server": {
+          "name": "rubocop"
+        }
+      }
+    },
+    "HTML+ERB": {
+      "language_servers": [
+        "ruby-lsp",
+        "herb",
+        "tailwindcss-language-server"
+      ]
+    }
+  },
+  "agent_servers": {
+    "Claude Agent": {
+      "type": "custom",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@agentclientprotocol/claude-agent-acp@0.78.0"
+      ],
+      "env": {}
+    }
+  },
+  "tabs": {
+    "close_position": "left"
+  }
+}
