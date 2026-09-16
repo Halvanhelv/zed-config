@@ -36,6 +36,18 @@ debugger F-keys all match RubyMine already. `keymap.json` only fills gaps:
 | `cmd+alt+V` / `H` | split right / down | RubyMine has no shortcut for it |
 | `ctrl+cmd+B` | left dock | `cmd+B` went to Go to Definition |
 
+## JetBrains Mono is not optional
+
+JetBrains IDEs ship the font inside their bundled runtime
+(`*.app/Contents/jbr/Contents/Home/lib/fonts/`) and never install it
+system-wide, so it can be missing from `~/Library/Fonts` while RubyMine renders
+with it happily. Zed then falls back without saying so, and the result reads as
+grainy text rather than as a missing font. `install.sh` copies it out of any
+JetBrains IDE it finds.
+
+Ligatures are off (`buffer_font_features`), matching RubyMine, so `->` stays
+two glyphs instead of becoming an arrow.
+
 ## The Rails DSL patch
 
 `belongs_to`, `scope`, `has_many` and the rest read as keywords in RubyMine,

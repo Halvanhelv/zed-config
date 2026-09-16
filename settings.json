@@ -8,6 +8,7 @@
   "buffer_font_family": "JetBrains Mono",
   "buffer_font_size": 13,
   "mouse_wheel_zoom": true,
+  "soft_wrap": "editor_width",
   "project_panel": {
     "dock": "left"
   },
@@ -106,5 +107,9 @@
   },
   "buffer_line_height": {
     "custom": 1.2
+  },
+  "buffer_font_features": {
+    "calt": false,
+    "liga": false
   }
 }

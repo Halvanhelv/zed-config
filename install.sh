@@ -38,6 +38,25 @@ if command -v ruby >/dev/null 2>&1; then
   fi
 fi
 
+# settings.json asks for JetBrains Mono. JetBrains IDEs ship their own copy
+# inside the bundled runtime and never install it system-wide, so the font can
+# look present in RubyMine while Zed silently falls back to something else --
+# which reads as the text being oddly grainy rather than as a missing font.
+if ! ls "$HOME/Library/Fonts" /Library/Fonts 2>/dev/null | grep -qi jetbrainsmono; then
+  jb=$(ls -d /Applications/*.app/Contents/jbr/Contents/Home/lib/fonts 2>/dev/null | head -1)
+  if [ -n "${jb:-}" ] && ls "$jb"/JetBrainsMono-*.ttf >/dev/null 2>&1; then
+    mkdir -p "$HOME/Library/Fonts"
+    cp "$jb"/JetBrainsMono-*.ttf "$HOME/Library/Fonts/"
+    echo "JetBrains Mono: installed from $jb"
+  else
+    echo "JetBrains Mono: not installed and no JetBrains IDE to copy it from."
+    echo "  Get it at https://www.jetbrains.com/lp/mono/ or change"
+    echo "  buffer_font_family in settings.json."
+  fi
+else
+  echo "JetBrains Mono: already installed"
+fi
+
 # The Ruby grammar cannot tell the Rails DSL from any other method call, so the
 # highlighting patch lives outside the theme. Applying it needs the Ruby
 # extension on disk, which only happens after Zed has run once.
