@@ -234,10 +234,10 @@
             "font_style": "italic"
           },
           "function": {
-            "color": "#ffc66d"
+            "color": "#a9b7c6"
           },
           "function.method": {
-            "color": "#ffc66d"
+            "color": "#a9b7c6"
           },
           "function.definition": {
             "color": "#ffc66d"
@@ -327,10 +327,10 @@
             "color": "#ffc66d"
           },
           "function.builtin": {
-            "color": "#ffc66d"
+            "color": "#a9b7c6"
           },
           "function.method.builtin": {
-            "color": "#ffc66d"
+            "color": "#a9b7c6"
           },
           "variable.special.instance": {
             "color": "#9876aa"
