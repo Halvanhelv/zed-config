@@ -8,9 +8,10 @@
   "buffer_font_family": "JetBrains Mono",
   "buffer_font_size": 12,
   "mouse_wheel_zoom": true,
-  "soft_wrap": "editor_width",
+  "soft_wrap": "none",
   "project_panel": {
-    "dock": "left"
+    "dock": "left",
+    "git_status": true
   },
   "outline_panel": {
     "dock": "left"
@@ -103,7 +104,9 @@
     }
   },
   "tabs": {
-    "close_position": "left"
+    "close_position": "left",
+    "file_icons": true,
+    "git_status": true
   },
   "buffer_line_height": {
     "custom": 1.2
@@ -111,5 +114,8 @@
   "buffer_font_features": {
     "calt": false,
     "liga": false
-  }
+  },
+  "preferred_line_length": 120,
+  "show_wrap_guides": true,
+  "vertical_scroll_margin": 0
 }
