@@ -1,0 +1,10 @@
+# Zed's own state, not configuration: semantic index and prompt library are
+# binary LMDB stores that are rebuilt locally and would only ever conflict.
+embeddings/
+prompts/
+conversations/
+
+# Local backups taken while editing settings.
+*.bak
+*.bak-*
+*.bak2-*

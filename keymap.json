@@ -1,0 +1,48 @@
+// Overrides on top of the "JetBrains" base keymap (set in settings.json).
+// The base layer already covers navigation, refactoring, VCS and debugging;
+// only genuine gaps are filled here.
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      // The JetBrains layer leaves the agent panel unbound, so it falls back to
+      // the default `cmd-?`, which needs shift on a Mac layout.
+      "cmd-alt-a": "agent::ToggleFocus",
+
+      // RubyMine has no default shortcut for splitting the editor; these keys
+      // are unused by the JetBrains layer.
+      "cmd-alt-v": "pane::SplitRight",
+      "cmd-alt-h": "pane::SplitDown",
+
+      // The JetBrains layer binds `cmd-b` to editor::GoToDefinition, which
+      // takes `workspace::ToggleLeftDock` away. Put it back next door.
+      "ctrl-cmd-b": "workspace::ToggleLeftDock",
+
+      // The JetBrains layer sends `shift shift` to the command palette, the
+      // same place `cmd-shift-a` already goes, so double-shift finds actions
+      // only -- not files. Zed has no Search Everywhere, so point it at the
+      // file finder (the alternative Zed's own keymap leaves commented out)
+      // and keep `cmd-shift-a` for actions.
+      "shift shift": "file_finder::Toggle",
+
+      // RubyMine runs the last configuration with ctrl-r; the JetBrains layer
+      // only offers `cmd-f5`, and `shift-f10` opens the task picker instead.
+      "ctrl-r": "task::Rerun",
+
+      // RubyMine's Go to Test. Zed has no such action and leaves this key on
+      // pane::ReopenClosedItem, which reopens the last closed tab regardless of
+      // the cursor. The task is defined in tasks.json.
+      "cmd-shift-t": ["task::Spawn", { "task_name": "Go to test" }]
+    }
+  },
+  {
+    // Step through usages in place instead of opening the FindAllReferences
+    // multibuffer. Only vim mode binds these by default (`] r` / `[ r`);
+    // these are the same keys RubyMine uses for next/previous occurrence.
+    "context": "Editor",
+    "bindings": {
+      "cmd-alt-down": "editor::GoToNextReference",
+      "cmd-alt-up": "editor::GoToPreviousReference"
+    }
+  }
+]
