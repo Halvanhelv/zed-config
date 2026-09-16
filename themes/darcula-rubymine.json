@@ -243,16 +243,16 @@
             "color": "#ffc66d"
           },
           "constant": {
-            "color": "#a9b7c6"
+            "color": "#feFFF9"
           },
           "constructor": {
-            "color": "#a9b7c6"
+            "color": "#feFFF9"
           },
           "type": {
-            "color": "#a9b7c6"
+            "color": "#feFFF9"
           },
           "type.class": {
-            "color": "#a9b7c6"
+            "color": "#feFFF9"
           },
           "variable": {
             "color": "#a9b7c6"
@@ -321,7 +321,7 @@
             "color": "#cc7832"
           },
           "type.super": {
-            "color": "#a9b7c6"
+            "color": "#feFFF9"
           },
           "function.method.definition": {
             "color": "#ffc66d"
