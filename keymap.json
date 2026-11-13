@@ -30,7 +30,7 @@
       "ctrl-r": "task::Rerun",
 
       // The JetBrains layer took `cmd-0` (reset zoom) for the git panel, so
-      // zoom (cmd-+/cmd--) had no way back. `cmd-shift-0` is only bound
+      // font size (cmd-=/cmd--) had no way back. `cmd-shift-0` is only bound
       // inside the image viewer.
       "cmd-shift-0": "zed::ResetBufferFontSize",
 
@@ -47,7 +47,12 @@
     "context": "Editor",
     "bindings": {
       "cmd-alt-down": "editor::GoToNextReference",
-      "cmd-alt-up": "editor::GoToPreviousReference"
+      "cmd-alt-up": "editor::GoToPreviousReference",
+
+      // The JetBrains layer folds code on `cmd--` / `cmd-+`; take them back for
+      // font size. Folding stays on Zed's `cmd-alt-[` / `cmd-alt-]`.
+      "cmd--": ["zed::DecreaseBufferFontSize", { "persist": false }],
+      "cmd-+": ["zed::IncreaseBufferFontSize", { "persist": false }]
     }
   }
 ]
