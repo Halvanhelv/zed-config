@@ -87,9 +87,6 @@
   },
   "lsp": {
     "ruby-lsp": {
-      "binary": {
-        "path": "/Users/you/.config/zed/bin/ruby-lsp"
-      },
       "initialization_options": {
         "featuresConfiguration": {
           "inlayHint": {

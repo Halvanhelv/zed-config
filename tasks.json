@@ -5,24 +5,28 @@
     // and that key is otherwise pane::ReopenClosedItem, which reopens whatever
     // tab was closed last -- unrelated to the cursor.
     "label": "Go to test",
-    "command": "/Users/you/.config/zed/bin/goto-test.sh",
-    "args": ["$ZED_FILE"],
+    "command": "sh",
+    "args": ["-c", "exec \"$HOME/.config/zed/bin/goto-test.sh\" \"$@\"", "goto-test", "$ZED_FILE"],
     "use_new_terminal": false,
     "allow_concurrent_runs": true,
     // Never surface the terminal: the jump should feel like a keystroke, not a
-    // build. The script reports its failures through Notification Center.
+    // build. The script reports its failures as a desktop notification.
     "reveal": "never",
     "hide": "always",
-    // "system" would start the login shell (zsh, ~85ms of rc files here) just
-    // to exec a /bin/sh script.
+    // Zed quotes the command when a task has arguments, so `$HOME` would reach
+    // the script unexpanded; the `sh -c` above expands it itself. "system"
+    // would start the login shell and its rc files just to exec a script.
     "shell": { "program": "/bin/sh" }
   },
   {
     // The green arrows the Ruby extension puts beside tests carry the
     // `ruby-test` tag and run nothing until a task claims it. ctrl+R reruns.
     "label": "test $ZED_RELATIVE_FILE:$ZED_ROW",
-    "command": "/Users/you/.config/zed/bin/run-test.sh",
-    "args": ["$ZED_FILE", "$ZED_ROW", "$ZED_CUSTOM_RUBY_TEST_NAME"],
+    "command": "sh",
+    "args": [
+      "-c", "exec \"$HOME/.config/zed/bin/run-test.sh\" \"$@\"", "run-test",
+      "$ZED_FILE", "$ZED_ROW", "$ZED_CUSTOM_RUBY_TEST_NAME"
+    ],
     "tags": ["ruby-test"],
     "use_new_terminal": false,
     "allow_concurrent_runs": false,

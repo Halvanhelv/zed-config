@@ -8,3 +8,6 @@ conversations/
 *.bak
 *.bak-*
 *.bak2-*
+
+# Zed writes this when it migrates settings.json to a newer format.
+settings_backup.json

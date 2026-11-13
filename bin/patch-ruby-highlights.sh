@@ -23,7 +23,8 @@
 # kept alongside and the block is rebuilt from it every time.
 set -eu
 
-SCM="$HOME/Library/Application Support/Zed/extensions/installed/ruby/languages/ruby/highlights.scm"
+. "$(dirname "$0")/_common.sh"
+SCM=$(ruby_highlights_scm)
 MARK="; --- rails-dsl (patched by patch-ruby-highlights.sh) ---"
 
 # --if-needed: run by the launchd agent whenever the extension changes on disk.
@@ -162,5 +163,5 @@ SCHEME
 echo "patched: $SCM"
 echo "Restart Zed for the grammar change to take effect."
 if $if_needed; then
-  osascript -e 'display notification "Rails DSL highlighting re-applied. Restart Zed to see it." with title "Zed Ruby extension updated"' >/dev/null 2>&1 || true
+  notify "Zed Ruby extension updated" "Rails DSL highlighting re-applied. Restart Zed to see it."
 fi

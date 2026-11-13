@@ -1,28 +1,110 @@
-# Zed configuration
+# Zed for RubyMine users
 
-My `~/.config/zed`, versioned in place. Cloning it to that path restores the
-editor as it stands; nothing is copied anywhere.
+A complete `~/.config/zed` that makes [Zed](https://zed.dev) look and behave
+like RubyMine for Ruby and Rails work: the JetBrains keymap with its gaps
+filled, a Darcula theme with colours measured off RubyMine, and ruby-lsp
+tuned until highlighting, navigation and tests feel the same.
+
+What you get on top of a stock Zed:
+
+- **RubyMine's Darcula colours**, including the Rails DSL (`has_many`,
+  `validates`, `before_action`) in RubyMine's brighter orange.
+- **Locals that look like RubyMine's**: every occurrence of a local variable or
+  parameter in the same colour, and the unused ones greyed out.
+- **Green run arrows beside tests** that run that one test (Minitest or RSpec),
+  `ctrl+R` to rerun, and `cmd+shift+T` to jump between a class and its test.
+- **RubyMine keys** that the JetBrains base keymap gets wrong or leaves out.
+- **Sticky lines and parameter info popups**, which Zed ships turned off.
+- **JetBrains file icons** with the Ruby mappings the upstream theme lacks.
+
+## Requirements
+
+- macOS. Linux works except one convenience, see [Platforms](#platforms).
+- Zed, with its command line tool (`zed: install cli` from the command palette).
+- Ruby 3.0 or newer, from rbenv, asdf, mise, chruby or your system.
+- git.
+
+## Install
+
+The repository *is* the configuration directory, so installing means cloning it
+to `~/.config/zed`. Move an existing configuration out of the way first:
 
 ```sh
-git clone git@github.com:Halvanhelv/zed-config.git ~/.config/zed
+[ -e ~/.config/zed ] && mv ~/.config/zed ~/.config/zed.before-zed-config
+git clone https://github.com/Halvanhelv/zed-config.git ~/.config/zed
+```
+
+Start Zed once and wait for it to install the extensions it lists under
+`auto_install_extensions` (Ruby among them). Then run the installer and restart
+Zed:
+
+```sh
 ~/.config/zed/install.sh
 ```
 
+The installer is safe to run again at any time, prints each step, and changes
+only these things:
+
+- for every Ruby 3.0+ it finds: installs the `ruby-lsp` gem if missing, and
+  links this repository's ruby-lsp add-on into that Ruby's `site_ruby`;
+- installs the JetBrains Mono font if missing (copied from an installed
+  JetBrains IDE, or through Homebrew);
+- links `extensions/jetbrains-icons-ruby` into Zed's extensions directory;
+- patches the Ruby extension's `highlights.scm` for the Rails DSL;
+- on macOS, loads a launchd agent that re-applies that patch after Zed updates
+  the extension.
+
+Your projects are never touched.
+
+**Fork it if you plan to change things.** Settings you will likely want to
+adjust: `theme`, `buffer_font_size`, `ui_font_size`, and the `agent` section.
+
+## Update
+
+```sh
+git -C ~/.config/zed pull
+~/.config/zed/install.sh
+```
+
+Run the installer again after installing a new Ruby, so it gets ruby-lsp and the
+add-on too.
+
+## Uninstall
+
+```sh
+~/.config/zed/install.sh --uninstall
+mv ~/.config/zed ~/.config/zed.removed
+```
+
+The first command removes the launchd agent, the add-on links, the icon theme
+link and the grammar patch. It leaves the ruby-lsp gem and the font installed.
+
+## Platforms
+
+Developed and tested on macOS. On Linux the scripts find Zed's data under
+`$XDG_DATA_HOME/zed` and notify through `notify-send`, but there is no watcher
+for extension updates: re-run `bin/patch-ruby-highlights.sh` after Zed updates
+the Ruby extension. Key bindings written with `cmd` are macOS bindings.
+
 ## What is here
 
-| File | Holds |
+| Path | Holds |
 |---|---|
 | `settings.json` | theme, fonts, docks, language servers, agents, tabs |
 | `keymap.json` | overrides on top of the JetBrains base keymap |
 | `tasks.json` | the `Go to test` task and the gutter test runner |
-| `bin/goto-test.sh` | source ↔ test jump used by that task |
+| `themes/darcula-rubymine.json` | the Darcula RubyMine theme |
+| `extensions/jetbrains-icons-ruby/` | the JetBrains icon theme with Ruby mappings |
+| `ruby-lsp/` | the ruby-lsp add-on for local variable highlighting |
+| `bin/goto-test.sh` | source ↔ test jump used by `Go to test` |
 | `bin/run-test.sh` | runs the test under a gutter arrow |
-| `bin/ruby-lsp`, `ruby-lsp/` | ruby-lsp wrapper and the add-on it loads |
 | `bin/patch-ruby-highlights.sh` | Rails DSL highlighting, patched into the Ruby extension |
-| `launchd/` | agent that re-applies that patch after an extension update |
+| `bin/_common.sh` | what differs between macOS and Linux, for the scripts above |
+| `launchd/` | the agent that re-applies the patch after an extension update |
+| `install.sh` | sets up and removes everything a clone cannot carry |
 
-Zed's `embeddings/`, `prompts/` and `conversations/` are ignored: they are
-local LMDB stores it rebuilds by itself.
+Zed's `embeddings/`, `prompts/`, `conversations/` and `settings_backup.json`
+are ignored: they are state Zed writes for itself.
 
 ## The JetBrains keymap
 
@@ -42,14 +124,16 @@ debugger F-keys all match RubyMine already. `keymap.json` only fills gaps:
 | `cmd+-` / `cmd++` | font size | the base layer folds code on them; folding stays on `cmd+alt+[` / `]` |
 | `ctrl+cmd+G` | select all occurrences | RubyMine's key; the base layer put select-previous there |
 
+Zooming with `cmd` and the scroll wheel is off (`mouse_wheel_zoom`): a
+two-finger swipe with `cmd` held changed the font size by accident.
+
 ## JetBrains Mono is not optional
 
 JetBrains IDEs ship the font inside their bundled runtime
 (`*.app/Contents/jbr/Contents/Home/lib/fonts/`) and never install it
 system-wide, so it can be missing from `~/Library/Fonts` while RubyMine renders
 with it happily. Zed then falls back without saying so, and the result reads as
-grainy text rather than as a missing font. `install.sh` copies it out of any
-JetBrains IDE it finds.
+grainy text rather than as a missing font. `install.sh` installs it.
 
 Ligatures are off (`buffer_font_features`), matching RubyMine, so `->` stays
 two glyphs instead of becoming an arrow.
@@ -75,10 +159,9 @@ builders. Matching is by name across every Ruby file -- the parser cannot tell
 a Gemfile from a model -- so names common enough to collide with ordinary calls
 (`path`, `default`, `execute`, `file`, `up`, `down`, `change`) are left out.
 
-It edits an installed extension, so **a Zed extension update wipes it** -- the
-Ruby extension updated on 2026-10-20 and the DSL went uncoloured for three
-weeks before anyone noticed. A launchd agent
-(`launchd/zed-config.patch-ruby-highlights.plist`, loaded by `install.sh`)
+It edits an installed extension, so **a Zed extension update wipes it**, and
+nothing in the editor says so: the DSL just goes back to the plain call colour.
+On macOS a launchd agent (`launchd/zed-config.patch-ruby-highlights.plist`)
 watches the extension on disk and runs the script with `--if-needed`, which
 patches only a file that lost the patch and posts a notification asking for a
 Zed restart. Its log is `/tmp/zed-config.patch-ruby-highlights.log`.
@@ -105,16 +188,39 @@ add-on below.
 
 Its inlay hints are off until `featuresConfiguration.inlayHint` asks for them,
 and even then it only knows the implicit `rescue StandardError` and the value
-behind a shorthand hash key -- the listener registers exactly two handlers,
-`on_rescue_node_enter` and `on_implicit_node_enter`, on main as well as in the
-installed gem. Only the rescue one is on here; RubyMine does not repeat a
-shorthand hash value, so neither do we.
+behind a shorthand hash key. Only the rescue one is on here; RubyMine does not
+repeat a shorthand hash value, so neither do we.
 
 RubyMine's parameter-name hints, the `name` and `**options` it draws inside a
-call, are therefore out of reach, and not as a matter of waiting: Shopify
-closed the inlay hints issue saying parameter names are "covered by signature
-help" and not an inlay hint's job. Lines will stay shorter here than in
-RubyMine, with identical code.
+call, are out of reach: Shopify closed the inlay hints issue saying parameter
+names are "covered by signature help" and not an inlay hint's job.
+
+## Locals coloured everywhere, unused ones greyed
+
+`ruby-lsp` sends a semantic token for a local where it is read, but not where
+it is assigned (`total = 0`, `x ||= 1`, `x += 1`), nor for parameter names in
+a signature, nor for `it`. In `combined` mode those spots fall back to
+tree-sitter, so one variable showed in two colours: `a, b = ...` was coloured
+while `a = ...` was not.
+
+`ruby-lsp/lib/ruby_lsp/zed_locals/addon.rb` is a Ruby LSP add-on that sends
+the missing tokens. Ruby LSP loads add-ons it finds on the load path, and every
+Ruby's `site_ruby` directory is on the load path even under Bundler, so
+`install.sh` links the add-on there. It links the file rather than its
+directory: Ruby LSP looks for add-ons with a `**` glob, which does not descend
+into symlinked directories.
+
+It also greys out what RubyMine greys out: a local or parameter that is never
+read. Prism records on every read and write how many scopes up the variable
+lives (`depth`), so each read lands on the right `def` or block; when a scope
+ends, its unread names are marked. A bare `super` reads every parameter,
+`binding` exempts the whole scope, and `_`-prefixed names are skipped. LSP has
+no "unused" modifier and Ruby LSP's legend is fixed, so the add-on borrows
+`deprecated`, and two `semantic_token_rules` paint it `#808080` italic. On
+400 files of a real Rails app it flagged three spots, all genuinely unused.
+
+To see what the server actually sends for a file, use
+`dev: open highlights tree view` in Zed.
 
 ## Colours measured, not guessed
 
@@ -134,29 +240,19 @@ anchors exactly. What that turned up:
 | comma | `#cc7832` | but `.` and `::` stay default |
 
 A screen recording is not a substitute: H.264 stores chroma at quarter
-resolution and code glyphs are thinner than that grid. Recovering known Zed
-colours from a 1512x982 capture missed by 28 to 95 units -- more than the
-distance between the colours being told apart.
+resolution and code glyphs are thinner than that grid.
 
-Two RubyMine habits have no counterpart and are not worth hunting for: Zed has
-no peek popup (`cmd+Y`), no clipboard history, no complete-statement, and one
-symbol picker rather than separate class and symbol ones.
+## Ruby: the trap worth knowing
 
-## Ruby: the trap worth remembering
+Zed never installs `ruby-lsp`. The Ruby extension looks it up on `PATH` under
+the Ruby each project pins, and a project on a version that lacks it fails with
+`ruby-lsp: command not found` -- in the log only. The editor shows no error, it
+simply has no completion, no go to definition and no find usages, which reads
+like Zed being broken rather than a missing gem. That is why `install.sh`
+installs it into every Ruby it finds; re-run it after adding a Ruby.
 
-`ruby-lsp` is resolved from `PATH` and Zed never installs it. It has to be
-present under **every Ruby version a project pins**, because a project on a
-version that lacks it fails with `rbenv: ruby-lsp: command not found` -- in the
-log only. The editor shows no error, it simply has no completion, no go to
-definition and no find usages, which reads like Zed being broken rather than a
-missing gem.
-
-```sh
-RBENV_VERSION=4.0.4 gem install ruby-lsp && rbenv rehash
-```
-
-`ruby-lsp` then builds its own bundle under `.ruby-lsp/` and pulls in
-`ruby-lsp-rails` on its own; that directory git-ignores itself.
+`ruby-lsp` then builds its own bundle under `.ruby-lsp/` in each project and
+pulls in `ruby-lsp-rails` on its own; that directory git-ignores itself.
 
 `languages.Ruby.language_servers` lists servers explicitly rather than ending
 with `"..."`. The wildcard also starts sorbet, steep, fuzzy-ruby-server and
@@ -167,32 +263,6 @@ Formatting is pinned to `rubocop`, since ruby-lsp advertises it too and the
 winner would otherwise be arbitrary. `ruby-lsp`'s own diagnostics are off
 because rubocop's language server already reports them.
 
-## Ruby: locals coloured everywhere, not only where read
-
-`ruby-lsp` sends a semantic token for a local where it is read, but not where
-it is assigned (`total = 0`, `x ||= 1`, `x += 1`), nor for parameter names in
-a signature, nor for `it`. In `combined` mode those spots fall back to
-tree-sitter, so one variable showed in two colours. `a, b = ...` was
-coloured while `a = ...` was not.
-
-`ruby-lsp/lib/ruby_lsp/zed_locals/addon.rb` is a Ruby LSP add-on that sends
-the missing tokens. Ruby LSP picks add-ons up from the load path, and Zed's
-Ruby extension ignores `binary.env`, so `bin/ruby-lsp` sets `RUBYLIB` and
-`lsp.ruby-lsp.binary.path` points at it. The projects themselves are not
-touched.
-
-It also greys out what RubyMine greys out: a local or parameter that is never
-read. Prism records on every read and write how many scopes up the variable
-lives (`depth`), so each read lands on the right `def` or block; when a scope
-ends, its unread names are marked. A bare `super` reads every parameter,
-`binding` exempts the whole scope, and `_`-prefixed names are skipped. LSP has
-no "unused" modifier and Ruby LSP's legend is fixed, so the add-on borrows
-`deprecated`, and two `semantic_token_rules` paint it `#808080` italic. On
-400 files of a real Rails app it flagged three spots, all genuinely unused.
-
-To see what the server actually sends for a file, use
-`dev: open highlights tree view` in Zed.
-
 ## RubyMine habits switched on
 
 - `auto_signature_help`: parameter info pops up inside a call's parentheses,
@@ -200,11 +270,42 @@ To see what the server actually sends for a file, use
 - `sticky_scroll`: the enclosing `class` and `def` stay pinned to the top while
   scrolling, RubyMine's sticky lines. Zed ships it off.
 
-Two things cannot be matched. `shift+F6` renames constants only: ruby-lsp's
-rename request locates constant nodes and nothing else, and an add-on has no
-hook for rename. For a local, `ctrl+cmd+G` selects every occurrence. And
-ruby-lsp's code lenses (`Run | Debug` above tests) call VS Code commands, so
-`code_lens` stays off; the gutter arrows below do that job.
+What cannot be matched: `shift+F6` renames constants only, because ruby-lsp's
+rename handles constants and nothing else and an add-on has no hook for it; for
+a local, `ctrl+cmd+G` selects every occurrence. ruby-lsp's code lenses
+(`Run | Debug` above tests) call VS Code commands, so `code_lens` stays off; the
+gutter arrows do that job. Zed has no peek popup (`cmd+Y`), no clipboard
+history and no complete-statement.
+
+## Run the test under the cursor
+
+The Ruby extension puts a green arrow beside every `test "..."`, `def test_`,
+test class and RSpec example, tagged `ruby-test` -- but an arrow runs nothing
+until some task claims that tag. The `test ...` task in `tasks.json` does,
+through `bin/run-test.sh`; `ctrl+R` reruns it.
+
+Minitest runs by name (`-n test_...`, the method name Rails derives from the
+string), not by line: with minitest 6, Rails 8.1 ignores the `file:line`
+filter and runs the whole file. An arrow on a class line runs the whole file;
+RSpec gets `file:line`. The project root is the nearest directory with a
+Gemfile.
+
+The tasks reach the scripts through `sh -c '"$HOME/..." "$@"'` rather than a
+plain path: Zed quotes the command of a task that has arguments, so a `$HOME`
+in it would never be expanded, and an absolute path would tie the file to one
+machine.
+
+## Go to test
+
+`cmd+shift+T` swaps between `app/…/x.rb` and `test/…/x_test.rb` (or
+`spec/…/x_spec.rb`, whichever exists) in both directions, substituting on the
+first `/app/`, `/test/` or `/spec/` segment so it also works when the Rails
+root is not the worktree root.
+
+The terminal tab it spawns flashes and closes. That is structural: Zed creates
+a terminal item for every task, and `reveal: "never"` only stops it taking
+focus. Failures go to a desktop notification instead, since nothing printed in
+that tab would be read.
 
 ## Tailwind in ERB
 
@@ -226,26 +327,8 @@ alternative is Zed's own registry (`zed: acp registry`), which manages updates
 It authenticates separately from Zed's built-in agent: open a thread and run
 `/login`. An Anthropic key configured for Zed does not carry over.
 
-## Run the test under the cursor
+## License
 
-The Ruby extension puts a green arrow beside every `test "..."`, `def test_`,
-test class and RSpec example, tagged `ruby-test` -- but an arrow runs nothing
-until some task claims that tag, and none did. The `test ...` task in
-`tasks.json` does, through `bin/run-test.sh`; `ctrl+R` reruns it.
-
-Minitest runs by name (`-n test_...`, the method name Rails derives from the
-string), not by line: with minitest 6, Rails 8.1 ignores the `file:line`
-filter and runs the whole file. An arrow on a class line runs the whole file;
-RSpec gets `file:line`. The project root is the nearest directory with a
-Gemfile.
-
-## Go to test
-
-`cmd+shift+T` swaps between `app/…/x.rb` and `test/…/x_test.rb` in both
-directions, substituting on the first `/app/` or `/test/` segment so it also
-works when the Rails root is not the worktree root.
-
-The terminal tab it spawns flashes and closes. That is structural: Zed creates
-a terminal item for every task, and `reveal: "never"` only stops it taking
-focus. Failures go to Notification Center instead, since nothing printed in
-that tab would be read.
+MIT, see [LICENSE](LICENSE). `extensions/jetbrains-icons-ruby` is a fork of
+[ziishaned/zed-jetbrains-icons](https://github.com/ziishaned/zed-jetbrains-icons)
+and keeps its Apache 2.0 license, in that directory's `LICENSE`.
