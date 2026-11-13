@@ -1,0 +1,5 @@
+#!/bin/sh
+# Starts ruby-lsp with the add-on in ruby-lsp/lib, which colours locals where
+# they are assigned and declared, not only where they are read. Zed's Ruby
+# extension ignores `binary.env`, so the load path has to be set here.
+RUBYLIB="$HOME/.config/zed/ruby-lsp/lib${RUBYLIB:+:$RUBYLIB}" exec ruby-lsp "$@"

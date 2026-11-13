@@ -16,6 +16,7 @@ git clone git@github.com:Halvanhelv/zed-config.git ~/.config/zed
 | `keymap.json` | overrides on top of the JetBrains base keymap |
 | `tasks.json` | the `Go to test` task |
 | `bin/goto-test.sh` | source ↔ test jump used by that task |
+| `bin/ruby-lsp`, `ruby-lsp/` | ruby-lsp wrapper and the add-on it loads |
 
 Zed's `embeddings/`, `prompts/` and `conversations/` are ignored: they are
 local LMDB stores it rebuilds by itself.
@@ -155,6 +156,23 @@ fails.
 Formatting is pinned to `rubocop`, since ruby-lsp advertises it too and the
 winner would otherwise be arbitrary. `ruby-lsp`'s own diagnostics are off
 because rubocop's language server already reports them.
+
+## Ruby: locals coloured everywhere, not only where read
+
+`ruby-lsp` sends a semantic token for a local where it is read, but not where
+it is assigned (`total = 0`, `x ||= 1`, `x += 1`), nor for parameter names in
+a signature, nor for `it`. In `combined` mode those spots fall back to
+tree-sitter, so one variable showed in two colours. `a, b = ...` was
+coloured while `a = ...` was not.
+
+`ruby-lsp/lib/ruby_lsp/zed_locals/addon.rb` is a Ruby LSP add-on that sends
+the missing tokens. Ruby LSP picks add-ons up from the load path, and Zed's
+Ruby extension ignores `binary.env`, so `bin/ruby-lsp` sets `RUBYLIB` and
+`lsp.ruby-lsp.binary.path` points at it. The projects themselves are not
+touched.
+
+To see what the server actually sends for a file, use
+`dev: open highlights tree view` in Zed.
 
 ## Tailwind in ERB
 
