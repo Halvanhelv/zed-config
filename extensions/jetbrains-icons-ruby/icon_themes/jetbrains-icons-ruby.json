@@ -24,6 +24,18 @@
         "collapsed": "./icons/dark/chevron_right.svg",
         "expanded": "./icons/dark/chevron_down.svg"
       },
+      "file_patterns": {
+        "**/*_test.rb": "rails_test",
+        "**/*_spec.rb": "rails_test",
+        "db/migrate/*.rb": "rails_migration",
+        "app/models/**/*.rb": "rails_model",
+        "**/*_controller.rb": "rails_controller",
+        "app/helpers/**/*.rb": "rails_helper",
+        "app/jobs/**/*.rb": "rails_job",
+        "**/*_job.rb": "rails_job",
+        "app/mailers/**/*.rb": "rails_mailer",
+        "**/*_mailer.rb": "rails_mailer"
+      },
       "file_suffixes": {
         "7z": "archive",
         "Makefile": "makefile",
@@ -493,6 +505,27 @@
         },
         "groovy": {
           "path": "./icons/dark/groovy.svg"
+        },
+        "rails_model": {
+          "path": "./icons/dark/rails-model.svg"
+        },
+        "rails_controller": {
+          "path": "./icons/dark/rails-controller.svg"
+        },
+        "rails_helper": {
+          "path": "./icons/dark/rails-helper.svg"
+        },
+        "rails_job": {
+          "path": "./icons/dark/rails-job.svg"
+        },
+        "rails_mailer": {
+          "path": "./icons/dark/rails-mailer.svg"
+        },
+        "rails_migration": {
+          "path": "./icons/dark/rails-migration.svg"
+        },
+        "rails_test": {
+          "path": "./icons/dark/rails-test.svg"
         }
       }
     },
@@ -516,6 +549,18 @@
       "chevron_icons": {
         "collapsed": "./icons/light/chevron_right.svg",
         "expanded": "./icons/light/chevron_down.svg"
+      },
+      "file_patterns": {
+        "**/*_test.rb": "rails_test",
+        "**/*_spec.rb": "rails_test",
+        "db/migrate/*.rb": "rails_migration",
+        "app/models/**/*.rb": "rails_model",
+        "**/*_controller.rb": "rails_controller",
+        "app/helpers/**/*.rb": "rails_helper",
+        "app/jobs/**/*.rb": "rails_job",
+        "**/*_job.rb": "rails_job",
+        "app/mailers/**/*.rb": "rails_mailer",
+        "**/*_mailer.rb": "rails_mailer"
       },
       "file_suffixes": {
         "7z": "archive",
@@ -986,6 +1031,27 @@
         },
         "groovy": {
           "path": "./icons/light/groovy.svg"
+        },
+        "rails_model": {
+          "path": "./icons/light/rails-model.svg"
+        },
+        "rails_controller": {
+          "path": "./icons/light/rails-controller.svg"
+        },
+        "rails_helper": {
+          "path": "./icons/light/rails-helper.svg"
+        },
+        "rails_job": {
+          "path": "./icons/light/rails-job.svg"
+        },
+        "rails_mailer": {
+          "path": "./icons/light/rails-mailer.svg"
+        },
+        "rails_migration": {
+          "path": "./icons/light/rails-migration.svg"
+        },
+        "rails_test": {
+          "path": "./icons/light/rails-test.svg"
         }
       }
     }

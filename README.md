@@ -15,7 +15,10 @@ What you get on top of a stock Zed:
   `ctrl+R` to rerun, and `cmd+shift+T` to jump between a class and its test.
 - **RubyMine keys** that the JetBrains base keymap gets wrong or leaves out.
 - **Sticky lines and parameter info popups**, which Zed ships turned off.
-- **JetBrains file icons** with the Ruby mappings the upstream theme lacks.
+- **JetBrains file icons** with the Ruby mappings the upstream theme lacks,
+  and RubyMine-style badges for Rails models, controllers, helpers, jobs,
+  mailers, migrations and tests (needs a Zed build with `file_patterns`, see
+  below).
 
 ## Requirements
 
@@ -346,6 +349,18 @@ alternative is Zed's own registry (`zed: acp registry`), which manages updates
 
 It authenticates separately from Zed's built-in agent: open a thread and run
 `/login`. An Anthropic key configured for Zed does not carry over.
+
+## Rails file icons
+
+The icon theme marks Rails files by their path: a Ruby glyph with a badge for
+models (M), controllers (C), helpers (H), jobs (J), mailers (@), migrations
+(D) and tests (T). Picking an icon by path needs `file_patterns` in icon
+themes, proposed to Zed in
+[zed-industries/zed#66949](https://github.com/zed-industries/zed/pull/66949).
+A Zed without it ignores the section and shows the plain Ruby icon.
+
+Tests come first in `file_patterns`, so `spec/models/user_spec.rb` is a test,
+not a model.
 
 ## License
 
