@@ -20,7 +20,7 @@
   "ui_font_size": 15,
   "buffer_font_family": "JetBrains Mono",
   "buffer_font_size": 12,
-  "mouse_wheel_zoom": true,
+  "mouse_wheel_zoom": false,
   "soft_wrap": "none",
   "inlay_hints": { "enabled": true },
   "semantic_tokens": "combined",

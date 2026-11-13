@@ -30,7 +30,7 @@
       "ctrl-r": "task::Rerun",
 
       // The JetBrains layer took `cmd-0` (reset zoom) for the git panel, so
-      // zooming with cmd+scroll had no way back. `cmd-shift-0` is only bound
+      // zoom (cmd-+/cmd--) had no way back. `cmd-shift-0` is only bound
       // inside the image viewer.
       "cmd-shift-0": "zed::ResetBufferFontSize",
 
