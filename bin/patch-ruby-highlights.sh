@@ -26,10 +26,24 @@ set -eu
 SCM="$HOME/Library/Application Support/Zed/extensions/installed/ruby/languages/ruby/highlights.scm"
 MARK="; --- rails-dsl (patched by patch-ruby-highlights.sh) ---"
 
+# --if-needed: run by the launchd agent whenever the extension changes on disk.
+# Patch only a file that lost the patch, and wait out an update still unpacking.
+if_needed=false
+[ "${1:-}" = "--if-needed" ] && if_needed=true
+
+if $if_needed; then
+  tries=0
+  while [ ! -f "$SCM" ] && [ $tries -lt 30 ]; do sleep 1; tries=$((tries + 1)); done
+  [ -f "$SCM" ] || exit 0
+  grep -qF "$MARK" "$SCM" && exit 0
+fi
+
 [ -f "$SCM" ] || { echo "not found: $SCM"; echo "Is the Ruby extension installed?"; exit 1; }
 
-# Rebuild from the pristine copy so the list can grow between runs.
-if [ -f "$SCM.orig" ]; then
+# A file without the mark is what the extension shipped, possibly a newer
+# version, so it becomes the pristine copy. Otherwise rebuild from that copy,
+# which lets the list grow between runs.
+if grep -qF "$MARK" "$SCM"; then
   cp "$SCM.orig" "$SCM"
 else
   cp "$SCM" "$SCM.orig"
@@ -147,3 +161,6 @@ SCHEME
 
 echo "patched: $SCM"
 echo "Restart Zed for the grammar change to take effect."
+if $if_needed; then
+  osascript -e 'display notification "Rails DSL highlighting re-applied. Restart Zed to see it." with title "Zed Ruby extension updated"' >/dev/null 2>&1 || true
+fi

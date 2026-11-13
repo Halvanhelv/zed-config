@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Re-applies bin/patch-ruby-highlights.sh when a Zed extension update
+     replaces the Ruby grammar. install.sh fills in __HOME__. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>zed-config.patch-ruby-highlights</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string>
+    <string>__HOME__/.config/zed/bin/patch-ruby-highlights.sh</string>
+    <string>--if-needed</string>
+  </array>
+  <key>WatchPaths</key>
+  <array>
+    <string>__HOME__/Library/Application Support/Zed/extensions/installed</string>
+    <string>__HOME__/Library/Application Support/Zed/extensions/installed/ruby/languages/ruby/highlights.scm</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/tmp/zed-config.patch-ruby-highlights.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/zed-config.patch-ruby-highlights.log</string>
+</dict>
+</plist>

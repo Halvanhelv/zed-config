@@ -16,5 +16,18 @@
     // "system" would start the login shell (zsh, ~85ms of rc files here) just
     // to exec a /bin/sh script.
     "shell": { "program": "/bin/sh" }
+  },
+  {
+    // The green arrows the Ruby extension puts beside tests carry the
+    // `ruby-test` tag and run nothing until a task claims it. ctrl+R reruns.
+    "label": "test $ZED_RELATIVE_FILE:$ZED_ROW",
+    "command": "/Users/you/.config/zed/bin/run-test.sh",
+    "args": ["$ZED_FILE", "$ZED_ROW", "$ZED_CUSTOM_RUBY_TEST_NAME"],
+    "tags": ["ruby-test"],
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    // The login shell puts rbenv's Ruby on PATH.
+    "shell": "system"
   }
 ]

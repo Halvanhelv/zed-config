@@ -52,7 +52,12 @@
       // The JetBrains layer folds code on `cmd--` / `cmd-+`; take them back for
       // font size. Folding stays on Zed's `cmd-alt-[` / `cmd-alt-]`.
       "cmd--": ["zed::DecreaseBufferFontSize", { "persist": false }],
-      "cmd-+": ["zed::IncreaseBufferFontSize", { "persist": false }]
+      "cmd-+": ["zed::IncreaseBufferFontSize", { "persist": false }],
+
+      // RubyMine's Select All Occurrences. The JetBrains layer put
+      // editor::SelectPrevious here. It also stands in for renaming a local,
+      // which ruby-lsp cannot do.
+      "ctrl-cmd-g": "editor::SelectAllMatches"
     }
   }
 ]

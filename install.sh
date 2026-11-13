@@ -14,28 +14,37 @@ if [ "$here" != "$HOME/.config/zed" ]; then
   echo "         Zed reads only that path; move the clone there first."
 fi
 
-chmod +x "$here"/bin/*.sh
+chmod +x "$here"/bin/*
 
-# tasks.json names the helper by absolute path -- Zed does not expand ~ there.
-if grep -q '"/Users/[^"]*/.config/zed/bin/' "$here/tasks.json" 2>/dev/null; then
-  tmp=$(mktemp)
-  sed "s|\"/Users/[^\"]*/\.config/zed/bin/|\"$here/bin/|" "$here/tasks.json" > "$tmp"
-  mv "$tmp" "$here/tasks.json"
-  echo "tasks.json: helper path rewritten to $here/bin/"
-fi
+# tasks.json and settings.json name the helpers by absolute path -- Zed does
+# not expand ~ there.
+for f in tasks.json settings.json; do
+  if grep -q '"/Users/[^"]*/.config/zed/bin/' "$here/$f" 2>/dev/null; then
+    tmp=$(mktemp)
+    sed "s|\"/Users/[^\"]*/\.config/zed/bin/|\"$here/bin/|" "$here/$f" > "$tmp"
+    cat "$tmp" > "$here/$f" && rm "$tmp"
+    echo "$f: helper paths rewritten to $here/bin/"
+  fi
+done
 
 # Zed installs ruby-lsp for nobody. It is resolved from PATH, so it must exist
 # under the Ruby each project pins -- a version that lacks it fails silently
 # with "rbenv: ruby-lsp: command not found" and the editor simply has no Ruby
 # intelligence at all. Install it per Ruby version, not once.
-if command -v ruby >/dev/null 2>&1; then
-  if command -v ruby-lsp >/dev/null 2>&1; then
-    echo "ruby-lsp: $(ruby-lsp --version) for ruby $(ruby -e 'print RUBY_VERSION')"
-  else
-    echo "ruby-lsp: missing for ruby $(ruby -e 'print RUBY_VERSION') -- installing"
-    gem install ruby-lsp
-    command -v rbenv >/dev/null 2>&1 && rbenv rehash
-  fi
+# Every rbenv Ruby it supports (3.0 and up), not only the current one.
+if command -v rbenv >/dev/null 2>&1; then
+  for v in $(rbenv versions --bare); do
+    case "$v" in 1.* | 2.*) continue ;; esac
+    if RBENV_VERSION=$v gem list -i ruby-lsp >/dev/null 2>&1; then
+      echo "ruby-lsp: present for ruby $v"
+    else
+      echo "ruby-lsp: missing for ruby $v -- installing"
+      RBENV_VERSION=$v gem install ruby-lsp --no-document
+    fi
+  done
+  rbenv rehash
+elif command -v ruby >/dev/null 2>&1 && ! command -v ruby-lsp >/dev/null 2>&1; then
+  gem install ruby-lsp
 fi
 
 # settings.json asks for JetBrains Mono. JetBrains IDEs ship their own copy
@@ -66,6 +75,16 @@ else
   echo "ruby extension not installed yet -- run bin/patch-ruby-highlights.sh"
   echo "  after Zed's first launch (and again after it updates the extension)."
 fi
+
+# Extension updates replace the Ruby grammar and drop the patch. A launchd agent
+# watches for that and re-applies it.
+agent=zed-config.patch-ruby-highlights
+plist="$HOME/Library/LaunchAgents/$agent.plist"
+mkdir -p "$HOME/Library/LaunchAgents"
+sed "s|__HOME__|$HOME|g" "$here/launchd/$agent.plist" > "$plist"
+launchctl bootout "gui/$(id -u)/$agent" 2>/dev/null || true
+launchctl bootstrap "gui/$(id -u)" "$plist"
+echo "launchd: $agent loaded"
 
 echo
 echo "Done. Zed installs the rest on first launch:"

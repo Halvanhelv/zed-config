@@ -21,6 +21,8 @@
   "buffer_font_family": "JetBrains Mono",
   "buffer_font_size": 12,
   "mouse_wheel_zoom": false,
+  "auto_signature_help": true,
+  "sticky_scroll": { "enabled": true },
   "soft_wrap": "none",
   "inlay_hints": { "enabled": true },
   "semantic_tokens": "combined",
@@ -121,6 +123,8 @@
   },
   "global_lsp_settings": {
     "semantic_token_rules": [
+      { "token_type": "variable", "token_modifiers": ["deprecated"], "foreground_color": "#808080", "font_style": "italic" },
+      { "token_type": "parameter", "token_modifiers": ["deprecated"], "foreground_color": "#808080", "font_style": "italic" },
       { "token_type": "variable", "token_modifiers": ["defaultLibrary"], "style": ["variable.special"] },
       { "token_type": "variable", "foreground_color": "#d4b021", "font_style": "italic" },
       { "token_type": "parameter", "foreground_color": "#d4b021", "font_style": "italic" },
