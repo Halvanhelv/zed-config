@@ -1,5 +1,5 @@
-<!-- Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
+<!-- Built from IntelliJ Community icons (Copyright 2000-2024 JetBrains s.r.o. and contributors, Apache 2.0): nodes/class, nodes/interface colours. -->
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="8" cy="8" r="6.5" fill="#FFF7F7" stroke="#DB3B4B"/>
-<path d="M7.25726 12H8.2744V7.32741H9.82869V6.43027H8.2744V5.48C8.2744 5.12 8.52012 4.87429 8.8744 4.87429H9.88012V4H8.77726C7.8744 4 7.25726 4.57143 7.25726 5.40571V6.43027H6.12012V7.32741H7.25726V12Z" fill="#DB3B4B"/>
+<circle cx="8" cy="8" r="6.5" fill="#F2FCF3" stroke="#208A3C"/>
+<path d="M5.25 11V5H6.3L8 8.35L9.7 5H10.75V11H9.8V6.9L8.4 9.6H7.6L6.2 6.9V11H5.25Z" fill="#208A3C"/>
 </svg>

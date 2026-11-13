@@ -356,17 +356,18 @@ The icon theme marks Rails files by their path, with icons from
 [IntelliJ Community](https://github.com/JetBrains/intellij-community)
 (`platform/icons/src/expui`, Apache 2.0, taken at `b7a082509f`):
 
-| Files | IntelliJ icon |
+| Files | Icon |
 |---|---|
 | `app/models/**` | `nodes/modelClass` |
 | `*_controller.rb` | `nodes/controller` |
-| `app/helpers/**` | `nodes/function` |
-| `app/jobs/**`, `*_job.rb` | `gutter/runInQueue` |
-| `app/mailers/**`, `*_mailer.rb` | `general/balloon` |
-| `db/migrate/*.rb` | `nodes/dataSchema` |
-| `*_test.rb`, `*_spec.rb` | `nodes/test` |
+| `app/mailers/**`, `*_mailer.rb` | the controller's class base with an envelope |
+| `app/helpers/**` | a module: the class circle in green with an M |
+| `app/jobs/**`, `*_job.rb`, `db/migrate/*.rb` | `nodes/class` |
+| `*_test.rb` | the Ruby glyph with `nodes/junitTestMark` |
+| `*_spec.rb` | the same in blue |
 
-RubyMine's own Rails icons live in its closed-source Ruby plugin, so they are
+These follow what RubyMine shows for each kind of file, built from open
+IntelliJ parts only. RubyMine's own Rails icons live in its closed-source Ruby plugin, so they are
 not used here. Tests come first in `file_patterns`, so
 `spec/models/user_spec.rb` is a test, not a model.
 
