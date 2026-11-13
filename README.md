@@ -16,7 +16,7 @@ What you get on top of a stock Zed:
 - **RubyMine keys** that the JetBrains base keymap gets wrong or leaves out.
 - **Sticky lines and parameter info popups**, which Zed ships turned off.
 - **JetBrains file icons** with the Ruby mappings the upstream theme lacks,
-  and RubyMine-style badges for Rails models, controllers, helpers, jobs,
+  and IntelliJ's own icons for Rails models, controllers, helpers, jobs,
   mailers, migrations and tests (needs a Zed build with `file_patterns`, see
   below).
 
@@ -352,15 +352,27 @@ It authenticates separately from Zed's built-in agent: open a thread and run
 
 ## Rails file icons
 
-The icon theme marks Rails files by their path: a Ruby glyph with a badge for
-models (M), controllers (C), helpers (H), jobs (J), mailers (@), migrations
-(D) and tests (T). Picking an icon by path needs `file_patterns` in icon
-themes, proposed to Zed in
-[zed-industries/zed#66949](https://github.com/zed-industries/zed/pull/66949).
-A Zed without it ignores the section and shows the plain Ruby icon.
+The icon theme marks Rails files by their path, with icons from
+[IntelliJ Community](https://github.com/JetBrains/intellij-community)
+(`platform/icons/src/expui`, Apache 2.0, taken at `b7a082509f`):
 
-Tests come first in `file_patterns`, so `spec/models/user_spec.rb` is a test,
-not a model.
+| Files | IntelliJ icon |
+|---|---|
+| `app/models/**` | `nodes/modelClass` |
+| `*_controller.rb` | `nodes/controller` |
+| `app/helpers/**` | `nodes/function` |
+| `app/jobs/**`, `*_job.rb` | `gutter/runInQueue` |
+| `app/mailers/**`, `*_mailer.rb` | `general/balloon` |
+| `db/migrate/*.rb` | `nodes/dataSchema` |
+| `*_test.rb`, `*_spec.rb` | `nodes/test` |
+
+RubyMine's own Rails icons live in its closed-source Ruby plugin, so they are
+not used here. Tests come first in `file_patterns`, so
+`spec/models/user_spec.rb` is a test, not a model.
+
+Picking an icon by path needs `file_patterns` in icon themes, proposed to Zed
+in [zed-industries/zed#66949](https://github.com/zed-industries/zed/pull/66949).
+A Zed without it ignores the section and shows the plain Ruby icon.
 
 ## License
 

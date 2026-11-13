@@ -14,7 +14,10 @@ This copy adds the missing mappings and nothing else:
 The upstream theme has no Rails-specific artwork, so everything Ruby-shaped
 shares one glyph. Distinguishing them would mean drawing new SVGs.
 
-The SVGs under `icons/` are the upstream ones, unmodified.
+The SVGs under `icons/` are the upstream ones, unmodified, except the
+`rails-*.svg` files: those are IntelliJ Community icons (Apache 2.0, see the
+repository README), used through `file_patterns` for Rails models,
+controllers, helpers, jobs, mailers, migrations and tests.
 
 ## Install
 
