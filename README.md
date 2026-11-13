@@ -19,7 +19,7 @@ What you get on top of a stock Zed:
 
 ## Requirements
 
-- macOS. Linux works except one convenience, see [Platforms](#platforms).
+- macOS or Linux, see [Platforms](#platforms).
 - Zed, with its command line tool (`zed: install cli` from the command palette).
 - Ruby 3.0 or newer, from rbenv, asdf, mise, chruby or your system.
 - git.
@@ -27,7 +27,8 @@ What you get on top of a stock Zed:
 ## Install
 
 The repository *is* the configuration directory, so installing means cloning it
-to `~/.config/zed`. Move an existing configuration out of the way first:
+to `~/.config/zed` (`$XDG_CONFIG_HOME/zed` on Linux if you set that). Move an
+existing configuration out of the way first:
 
 ```sh
 [ -e ~/.config/zed ] && mv ~/.config/zed ~/.config/zed.before-zed-config
@@ -48,7 +49,7 @@ only these things:
 - for every Ruby 3.0+ it finds: installs the `ruby-lsp` gem if missing, and
   links this repository's ruby-lsp add-on into that Ruby's `site_ruby`;
 - installs the JetBrains Mono font if missing (copied from an installed
-  JetBrains IDE, or through Homebrew);
+  JetBrains IDE, through Homebrew, or on Linux from JetBrains' release);
 - links `extensions/jetbrains-icons-ruby` into Zed's extensions directory;
 - patches the Ruby extension's `highlights.scm` for the Rails DSL;
 - on macOS, loads a launchd agent that re-applies that patch after Zed updates
@@ -81,10 +82,22 @@ link and the grammar patch. It leaves the ruby-lsp gem and the font installed.
 
 ## Platforms
 
-Developed and tested on macOS. On Linux the scripts find Zed's data under
-`$XDG_DATA_HOME/zed` and notify through `notify-send`, but there is no watcher
-for extension updates: re-run `bin/patch-ruby-highlights.sh` after Zed updates
-the Ruby extension. Key bindings written with `cmd` are macOS bindings.
+**macOS** is where it is used daily.
+
+**Linux** is tested in an Ubuntu 24.04 container with Ruby 3.2, and the
+ruby-lsp add-on also on Ruby 3.0: the installer (font from JetBrains' release
+included), uninstall, the ruby-lsp add-on, the test runner for Minitest and
+RSpec, go to test with the `zeditor` command, and a custom `$XDG_CONFIG_HOME`.
+The scripts find Zed's data under `$XDG_DATA_HOME/zed` and notify through
+`notify-send` when it is present. Two differences:
+
+- No watcher for extension updates: re-run `bin/patch-ruby-highlights.sh`
+  after Zed updates the Ruby extension.
+- Zed installed as a Flatpak keeps its data inside the sandbox; the scripts do
+  not look there.
+
+The key bindings follow RubyMine's macOS keymap on macOS and its Windows/Linux
+keymap on Linux; see the table below.
 
 ## What is here
 
@@ -108,21 +121,24 @@ are ignored: they are state Zed writes for itself.
 
 ## The JetBrains keymap
 
-`"base_keymap": "JetBrains"` does the heavy lifting -- `shift shift`, `cmd+B`,
-`alt+F7`, `shift+F6`, `cmd+alt+L`, the `cmd+1/7/0` tool windows and the
-debugger F-keys all match RubyMine already. `keymap.json` only fills gaps:
+`"base_keymap": "JetBrains"` does the heavy lifting -- double shift, go to
+definition, find usages, rename, reformat, the tool windows and the debugger
+keys all match RubyMine already. `keymap.json` only fills gaps, using
+`secondary-` (cmd on macOS, ctrl on Linux) where RubyMine's two keymaps agree
+and an `os == ...` context where they differ:
 
-| Keys | Action | Why |
-|---|---|---|
-| `shift shift` | file finder | the base layer sent it to the command palette, where `cmd+shift+A` already goes |
-| `cmd+shift+T` | `Go to test` task | Zed has no go-to-test; this key is otherwise "reopen closed tab" |
-| `cmd+alt+↓` / `↑` | next / previous reference | steps through usages without opening a multibuffer |
-| `ctrl+R` | rerun last task | RubyMine's Run |
-| `cmd+alt+A` | agent panel | unbound by the base layer |
-| `cmd+alt+V` / `H` | split right / down | RubyMine has no shortcut for it |
-| `ctrl+cmd+B` | left dock | `cmd+B` went to Go to Definition |
-| `cmd+-` / `cmd++` | font size | the base layer folds code on them; folding stays on `cmd+alt+[` / `]` |
-| `ctrl+cmd+G` | select all occurrences | RubyMine's key; the base layer put select-previous there |
+| macOS | Linux | Action | Why |
+|---|---|---|---|
+| `shift shift` | `shift shift` | file finder | the base layer sent it to the command palette, where find-action already goes |
+| `cmd+shift+T` | `ctrl+shift+T` | `Go to test` task | Zed has no go-to-test |
+| `cmd+alt+↓` / `↑` | `ctrl+alt+↓` / `↑` | next / previous reference | steps through usages without opening a multibuffer |
+| `cmd+alt+A` | `ctrl+alt+A` | agent panel | unbound by the base layer |
+| `ctrl+R` | `ctrl+F5` (base layer) | rerun last task | RubyMine's Rerun on each OS |
+| `ctrl+cmd+G` | `ctrl+alt+shift+J` | select all occurrences | RubyMine's key on each OS |
+| `cmd+-` / `cmd++` | `ctrl+-` / `ctrl+=` (Zed's own) | font size | on macOS the base layer folds code on them; folding stays on `cmd+alt+[` / `]` |
+| `cmd+shift+0` | `ctrl+0` (Zed's own) | reset font size | on macOS the base layer took `cmd+0` for the git panel |
+| `cmd+alt+V` / `H` | -- | split right / down | on Linux `ctrl+alt+H` is the call hierarchy |
+| `ctrl+cmd+B` | -- | left dock | on macOS `cmd+B` went to Go to Definition |
 
 Zooming with `cmd` and the scroll wheel is off (`mouse_wheel_zoom`): a
 two-finger swipe with `cmd` held changed the font size by accident.
@@ -214,7 +230,9 @@ It also greys out what RubyMine greys out: a local or parameter that is never
 read. Prism records on every read and write how many scopes up the variable
 lives (`depth`), so each read lands on the right `def` or block; when a scope
 ends, its unread names are marked. A bare `super` reads every parameter,
-`binding` exempts the whole scope, and `_`-prefixed names are skipped. LSP has
+`binding` exempts the whole scope, and `_`-prefixed names are skipped. The
+add-on runs inside whatever Ruby the project uses, so it sticks to Ruby 3.0
+syntax. LSP has
 no "unused" modifier and Ruby LSP's legend is fixed, so the add-on borrows
 `deprecated`, and two `semantic_token_rules` paint it `#808080` italic. On
 400 files of a real Rails app it flagged three spots, all genuinely unused.
@@ -290,10 +308,12 @@ filter and runs the whole file. An arrow on a class line runs the whole file;
 RSpec gets `file:line`. The project root is the nearest directory with a
 Gemfile.
 
-The tasks reach the scripts through `sh -c '"$HOME/..." "$@"'` rather than a
-plain path: Zed quotes the command of a task that has arguments, so a `$HOME`
-in it would never be expanded, and an absolute path would tie the file to one
-machine.
+The tasks reach the scripts through a small `sh -c` rather than a plain path:
+Zed quotes the command of a task that has arguments, so a `$HOME` in it would
+never be expanded, and an absolute path would tie the file to one machine. The
+`sh -c` also honours `$XDG_CONFIG_HOME` -- spelled out as an `if`, because Zed
+applies a `${VAR:-default}` itself before the shell ever runs, ignoring the
+variable.
 
 ## Go to test
 

@@ -12,7 +12,7 @@ module RubyLsp
       def activate(global_state, outgoing_queue); end
       def deactivate; end
       def name = "Zed locals"
-      def version = "0.2.0"
+      def version = "0.2.1"
 
       def create_semantic_highlighting_listener(response_builder, dispatcher)
         Listener.new(response_builder, dispatcher)
@@ -45,11 +45,11 @@ module RubyLsp
           define_singleton_method(:"on_#{type}_node_enter") { |_node| @scopes.push(Scope.new(Hash.new { |h, k| h[k] = [] }, {}, [], false)) }
           define_singleton_method(:"on_#{type}_node_leave") { |_node| mark_unused(@scopes.pop) }
         end
-        PARAMETERS.each { define_singleton_method(:"on_#{it}_node_enter") { |node| parameter(node) } }
-        READ_WRITES.each { define_singleton_method(:"on_#{it}_node_enter") { |node| read_write(node) } }
+        PARAMETERS.each { |type| define_singleton_method(:"on_#{type}_node_enter") { |node| parameter(node) } }
+        READ_WRITES.each { |type| define_singleton_method(:"on_#{type}_node_enter") { |node| read_write(node) } }
 
-        events = (SCOPES.flat_map { [:"on_#{it}_node_enter", :"on_#{it}_node_leave"] }) +
-          (PARAMETERS + READ_WRITES).map { :"on_#{it}_node_enter" }
+        events = SCOPES.flat_map { |type| [:"on_#{type}_node_enter", :"on_#{type}_node_leave"] } +
+          (PARAMETERS + READ_WRITES).map { |type| :"on_#{type}_node_enter" }
         dispatcher.register(
           self, *events,
           :on_local_variable_write_node_enter,
@@ -83,14 +83,14 @@ module RubyLsp
       # A bare `super` passes every parameter on.
       def on_forwarding_super_node_enter(_node)
         scope = @scopes.reverse_each.find { |s| s.parameters.any? }
-        scope&.parameters&.each { scope.reads[it] = true }
+        scope&.parameters&.each { |name| scope.reads[name] = true }
       end
 
       # `binding` can reach any local, so nothing in that scope is unused.
       def on_call_node_enter(node)
         return unless node.name == :binding && !node.receiver
 
-        @scopes.each { it.binding = true }
+        @scopes.each { |scope| scope.binding = true }
       end
 
       private
@@ -132,7 +132,7 @@ module RubyLsp
           next if scope.reads[name] || name.start_with?("_")
 
           tokens.compact.each do |token|
-            modifiers = token.modifier.filter_map { ResponseBuilders::SemanticHighlighting::TOKEN_MODIFIERS.key(it) }
+            modifiers = token.modifier.filter_map { |index| ResponseBuilders::SemanticHighlighting::TOKEN_MODIFIERS.key(index) }
             token.replace_modifier(modifiers | [UNUSED])
           end
         end

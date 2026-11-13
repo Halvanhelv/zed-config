@@ -1,54 +1,61 @@
 // Overrides on top of the "JetBrains" base keymap (set in settings.json).
 // The base layer already covers navigation, refactoring, VCS and debugging;
 // only genuine gaps are filled here.
+//
+// `secondary-` is cmd on macOS and ctrl on Linux, which is where RubyMine's
+// two keymaps agree. Where they differ, a block is limited to one OS.
 [
   {
     "context": "Workspace",
     "bindings": {
-      // The JetBrains layer leaves the agent panel unbound, so it falls back to
-      // the default `cmd-?`, which needs shift on a Mac layout.
-      "cmd-alt-a": "agent::ToggleFocus",
-
-      // RubyMine has no default shortcut for splitting the editor; these keys
-      // are unused by the JetBrains layer.
-      "cmd-alt-v": "pane::SplitRight",
-      "cmd-alt-h": "pane::SplitDown",
-
-      // The JetBrains layer binds `cmd-b` to editor::GoToDefinition, which
-      // takes `workspace::ToggleLeftDock` away. Put it back next door.
-      "ctrl-cmd-b": "workspace::ToggleLeftDock",
-
       // The JetBrains layer sends `shift shift` to the command palette, the
-      // same place `cmd-shift-a` already goes, so double-shift finds actions
-      // only -- not files. Zed has no Search Everywhere, so point it at the
-      // file finder (the alternative Zed's own keymap leaves commented out)
-      // and keep `cmd-shift-a` for actions.
+      // same place `secondary-shift-a` already goes, so double-shift finds
+      // actions only -- not files. Zed has no Search Everywhere, so point it
+      // at the file finder and keep `secondary-shift-a` for actions.
       "shift shift": "file_finder::Toggle",
 
-      // RubyMine runs the last configuration with ctrl-r; the JetBrains layer
-      // only offers `cmd-f5`, and `shift-f10` opens the task picker instead.
-      "ctrl-r": "task::Rerun",
-
-      // The JetBrains layer took `cmd-0` (reset zoom) for the git panel, so
-      // font size (cmd-=/cmd--) had no way back. `cmd-shift-0` is only bound
-      // inside the image viewer.
-      "cmd-shift-0": "zed::ResetBufferFontSize",
+      // The JetBrains layer leaves the agent panel unbound.
+      "secondary-alt-a": "agent::ToggleFocus",
 
       // RubyMine's Go to Test. Zed has no such action and leaves this key on
-      // pane::ReopenClosedItem, which reopens the last closed tab regardless of
-      // the cursor. The task is defined in tasks.json.
-      "cmd-shift-t": ["task::Spawn", { "task_name": "Go to test" }]
+      // reopen-closed-tab (macOS) or new-terminal (Linux). The task is in
+      // tasks.json.
+      "secondary-shift-t": ["task::Spawn", { "task_name": "Go to test" }]
     }
   },
   {
-    // Step through usages in place instead of opening the FindAllReferences
-    // multibuffer. Only vim mode binds these by default (`] r` / `[ r`);
-    // these are the same keys RubyMine uses for next/previous occurrence.
     "context": "Editor",
     "bindings": {
-      "cmd-alt-down": "editor::GoToNextReference",
-      "cmd-alt-up": "editor::GoToPreviousReference",
+      // Step through usages in place instead of opening the FindAllReferences
+      // multibuffer, on the keys RubyMine uses for next/previous occurrence.
+      "secondary-alt-down": "editor::GoToNextReference",
+      "secondary-alt-up": "editor::GoToPreviousReference"
+    }
+  },
+  {
+    "context": "os == macos > Workspace",
+    "bindings": {
+      // RubyMine has no default shortcut for splitting the editor; these keys
+      // are unused by the JetBrains layer. (On Linux ctrl-alt-h is the call
+      // hierarchy, so the splits stay macOS-only.)
+      "cmd-alt-v": "pane::SplitRight",
+      "cmd-alt-h": "pane::SplitDown",
 
+      // The JetBrains layer binds `cmd-b` to Go to Definition, which takes
+      // `workspace::ToggleLeftDock` away. Put it back next door.
+      "ctrl-cmd-b": "workspace::ToggleLeftDock",
+
+      // RubyMine for macOS reruns with ctrl-r; the JetBrains layer only offers
+      // `cmd-f5`. On Linux ctrl-r is Replace, and ctrl-f5 already reruns.
+      "ctrl-r": "task::Rerun",
+
+      // The JetBrains layer took `cmd-0` (reset font size) for the git panel.
+      "cmd-shift-0": "zed::ResetBufferFontSize"
+    }
+  },
+  {
+    "context": "os == macos > Editor",
+    "bindings": {
       // The JetBrains layer folds code on `cmd--` / `cmd-+`; take them back for
       // font size. Folding stays on Zed's `cmd-alt-[` / `cmd-alt-]`.
       "cmd--": ["zed::DecreaseBufferFontSize", { "persist": false }],
@@ -58,6 +65,13 @@
       // editor::SelectPrevious here. It also stands in for renaming a local,
       // which ruby-lsp cannot do.
       "ctrl-cmd-g": "editor::SelectAllMatches"
+    }
+  },
+  {
+    "context": "os == linux > Editor",
+    "bindings": {
+      // RubyMine's Select All Occurrences on Linux.
+      "ctrl-alt-shift-j": "editor::SelectAllMatches"
     }
   }
 ]

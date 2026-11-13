@@ -6,15 +6,16 @@
     // tab was closed last -- unrelated to the cursor.
     "label": "Go to test",
     "command": "sh",
-    "args": ["-c", "exec \"$HOME/.config/zed/bin/goto-test.sh\" \"$@\"", "goto-test", "$ZED_FILE"],
+    "args": ["-c", "c=$XDG_CONFIG_HOME; [ -n \"$c\" ] || c=$HOME/.config; exec \"$c/zed/bin/goto-test.sh\" \"$@\"", "goto-test", "$ZED_FILE"],
     "use_new_terminal": false,
     "allow_concurrent_runs": true,
     // Never surface the terminal: the jump should feel like a keystroke, not a
     // build. The script reports its failures as a desktop notification.
     "reveal": "never",
     "hide": "always",
-    // Zed quotes the command when a task has arguments, so `$HOME` would reach
-    // the script unexpanded; the `sh -c` above expands it itself. "system"
+    // Zed quotes the command when a task has arguments, so a variable in it
+    // would reach the script unexpanded; the `sh -c` above expands it itself.
+    // No ${VAR:-default} in it: Zed applies such defaults before the shell runs. "system"
     // would start the login shell and its rc files just to exec a script.
     "shell": { "program": "/bin/sh" }
   },
@@ -24,7 +25,7 @@
     "label": "test $ZED_RELATIVE_FILE:$ZED_ROW",
     "command": "sh",
     "args": [
-      "-c", "exec \"$HOME/.config/zed/bin/run-test.sh\" \"$@\"", "run-test",
+      "-c", "c=$XDG_CONFIG_HOME; [ -n \"$c\" ] || c=$HOME/.config; exec \"$c/zed/bin/run-test.sh\" \"$@\"", "run-test",
       "$ZED_FILE", "$ZED_ROW", "$ZED_CUSTOM_RUBY_TEST_NAME"
     ],
     "tags": ["ruby-test"],

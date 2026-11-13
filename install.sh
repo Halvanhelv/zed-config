@@ -39,6 +39,20 @@ rubies() {
   done | sort -u
 }
 
+# Linux: the official release, unpacked into the user's font directory.
+fonts_dir="${XDG_DATA_HOME:-$HOME/.local/share}/fonts/JetBrainsMono"
+install_font_from_release() {
+  tmp=$(mktemp -d)
+  curl -fsSL -o "$tmp/font.zip" \
+    https://github.com/JetBrains/JetBrainsMono/releases/download/v2.304/JetBrainsMono-2.304.zip &&
+    unzip -q "$tmp/font.zip" 'fonts/ttf/*' -d "$tmp" &&
+    mkdir -p "$fonts_dir" && cp "$tmp"/fonts/ttf/*.ttf "$fonts_dir/" &&
+    { command -v fc-cache >/dev/null 2>&1 && fc-cache -f "$fonts_dir" >/dev/null 2>&1 || true; }
+  status=$?
+  rm -rf "$tmp"
+  return $status
+}
+
 ruby_version() { "$1" -e 'print RUBY_VERSION'; }
 ruby_site_addon() { printf '%s/ruby_lsp/zed_locals/addon.rb\n' "$("$1" -e 'print RbConfig::CONFIG["sitelibdir"]')"; }
 
@@ -74,8 +88,9 @@ if [ "${1:-}" = "--uninstall" ]; then
   exit 0
 fi
 
-if [ "$here" != "$HOME/.config/zed" ]; then
-  echo "warning: expected to be at ~/.config/zed, found $here"
+config="${XDG_CONFIG_HOME:-$HOME/.config}/zed"
+if [ "$here" != "$config" ]; then
+  echo "warning: expected to be at $config, found $here"
   echo "         Zed reads only that path; move the clone there first."
 fi
 
@@ -131,6 +146,9 @@ else
     echo "JetBrains Mono: copied from $jb"
   elif command -v brew >/dev/null 2>&1 && brew install --cask font-jetbrains-mono >/dev/null 2>&1; then
     echo "JetBrains Mono: installed with Homebrew"
+  elif [ "$(uname -s)" != Darwin ] && command -v curl >/dev/null 2>&1 && command -v unzip >/dev/null 2>&1 &&
+       install_font_from_release; then
+    echo "JetBrains Mono: installed from JetBrains' release into $fonts_dir"
   else
     echo "JetBrains Mono: missing -- get it at https://www.jetbrains.com/lp/mono/"
     echo "  or change buffer_font_family in settings.json"
